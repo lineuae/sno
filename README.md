@@ -7,9 +7,6 @@
 
 - [📩・Deploy With](#deploys)
 - [⚙️・Setting up](#setup)
-- [💼・Term](#terms)
-- [🕵️‍♂️・Authors](#authors)
-- [🪄・Discord](https://discord.gg/uhq)
 
 ## <a id="deploys"></a>📩 〢 Deploys
 [![Deploy](https://raw.githubusercontent.com/Nekros-dsc/deploy-buttons/main/buttons/remade/replit.svg)](https://replit.com/github/Nekros-dsc/Snoway-Bot)
