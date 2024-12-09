@@ -1,4 +1,5 @@
 const Snoway = require('./source/structures/client/index')
+const keep_alive = require('./keep_alive.js')
 const client = new Snoway() 
 module.exports = client
 
@@ -10,15 +11,3 @@ process.on("uncaughtException", (e) => {
      
        console.log(e)
    })
-
-const express = require('express')
-const app = express()
-const port = process.env.PORT || 8080;
-
-app.get('/', (req, res) => {
-  res.send('I am Aive !')
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-})
