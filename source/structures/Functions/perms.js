@@ -23,8 +23,18 @@ module.exports = {
     run: async (client, message) => {
         const permissionIndex = await client.db.get(`perms_${message.guild.id}`) || {};
 
+        // Affichage du contenu de permissionIndex pour le débogage
+        console.log(permissionIndex);
+
+        if (Object.keys(permissionIndex).length === 0) {
+            return message.channel.send('Aucune permission trouvée.');
+        }
+
         let reply = 'Voici les rôles associés à chaque permission :\n';
         for (const [perm, data] of Object.entries(permissionIndex)) {
+            // Affichage du contenu de data pour le débogage
+            console.log(data);
+
             const roles = data.roles.map(roleId => message.guild.roles.cache.get(roleId)?.name || 'Rôle non trouvé').join(', ');
             reply += `\`${perm}\` : ${roles}\n`;
         }
