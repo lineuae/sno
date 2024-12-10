@@ -22,15 +22,15 @@ module.exports = {
     for (let i = 1; i <= 9; i++) {
       const permnames = `perm${i}`;
       const permission = permissions[permnames];
-      const roolenannanana = permission.role ? `<@&${permission.role}>` : 'Aucun rôle';
+      const roles = permission.roles ? permission.roles.map(roleId => `<@&${roleId}>`).join(', ') : 'Aucun rôle';
 
-      embed.addFields({name:`Permission ${i}`, value: `${roolenannanana}`, inline: true});
+      embed.addFields({ name: `Permission ${i}`, value: `${roles}`, inline: true });
     }
 
     const publicperm = permissions.public;
     const publicstatus = publicperm.status ? `✅` : '❌';
     
-    embed.addFields({name:'Permission Publique', value: `\`${publicstatus}\``});
+    embed.addFields({ name: 'Permission Publique', value: `\`${publicstatus}\`` });
 
     message.channel.send({ embeds: [embed] });
   }
