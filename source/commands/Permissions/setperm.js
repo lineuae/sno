@@ -24,9 +24,14 @@ module.exports = {
         if (permissionIndex["perm" + permission]) {
             permissionIndex["perm" + permission].roles = roles.map(role => role.id);
             await client.db.set(`perms_${message.guild.id}`, permissionIndex);
+
+            // Afficher les rôles mis à jour pour déboguer
+            console.log(`Mis à jour permissionIndex["perm${permission}"]:`, permissionIndex["perm" + permission]);
+
             message.channel.send(`Les rôles associés à la permission \`${permission}\` ont été mis à jour vers \`${roles.map(role => role.name).join(', ')}\`.`);
         } else {
             message.channel.send(`\`❌\` Erreur: La permission \`${permission}\` n'existe pas.`);
         }
     },
 };
+
