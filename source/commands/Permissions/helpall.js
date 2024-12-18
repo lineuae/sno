@@ -31,10 +31,11 @@ module.exports = {
             for (let i = startIndex; i < endIndex && i < permissionsArray.length; i++) {
                 const [permission, data] = permissionsArray[i];
                 const commands = data.commands && data.commands.length > 0 ? data.commands.join(', ') : "Non configuré";
+                const roles = data.roles && data.roles.length > 0 ? data.roles.map(roleId => `<@&${roleId}>`).join(', ') : "Aucun rôle";
 
                 info = {
                     perm: permission,
-                    role: data.role,
+                    roles: roles,
                     cmd: commands,
                     data: data
                 };
@@ -47,7 +48,7 @@ module.exports = {
                 .addFields(
                     {
                         name: `__${info.perm}__`,
-                        value: `${info.perm === "public" ? "@everyone" : (info.role ? `<@&${info.role}>` : "Non configuré")}`
+                        value: `${info.perm === "public" ? "@everyone" : (info.roles ? `${info.roles}` : "Non configuré")}`
                     },
                     {
                         name: `Commande${info.data?.commands.length !== undefined ? "s" : ""} [${info.data?.commands.length || 0}]`,
@@ -89,7 +90,7 @@ module.exports = {
                 return interaction.reply({
                     content: await client.lang('interaction'),
                     flags: 64
-                })
+                });
             }
 
             if (interaction.customId === 'prev' && currentPage > 1) {
