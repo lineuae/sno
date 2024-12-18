@@ -44,22 +44,30 @@ module.exports = {
         const oldPermissions = await client.db.get(`perms_${message.guild.id}`);
         const newPermissions = oldPermissions || {};
 
+        // Retirer la commande de toutes les permissions existantes
         for (const perm in newPermissions) {
-            const indexToRemove = newPermissions[perm].commands.indexOf(commandName);
-            if (indexToRemove !== -1) {
-                newPermissions[perm].commands.splice(indexToRemove, 1);
+            if (newPermissions[perm].commands) {
+                const indexToRemove = newPermissions[perm].commands.indexOf(commandName);
+                if (indexToRemove !== -1) {
+                    newPermissions[perm].commands.splice(indexToRemove, 1);
+                }
             }
         }
 
+        // Ajouter la commande aux nouvelles permissions spécifiées
         permissionsToAssign.forEach(permission => {
             if (permission === 'public') {
                 const publicPermissionIndex = newPermissions['public'] || { status: false, commands: [] };
-                publicPermissionIndex.commands.push(commandName);
+                if (!publicPermissionIndex.commands.includes(commandName)) {
+                    publicPermissionIndex.commands.push(commandName);
+                }
                 newPermissions['public'] = publicPermissionIndex;
             } else {
                 const permIndex = `perm${permission}`;
                 const permissionData = newPermissions[permIndex] || { roles: [], commands: [] };
-                permissionData.commands.push(commandName);
+                if (!permissionData.commands.includes(commandName)) {
+                    permissionData.commands.push(commandName);
+                }
                 newPermissions[permIndex] = permissionData;
             }
         });
