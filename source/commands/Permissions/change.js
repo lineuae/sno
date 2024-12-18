@@ -9,10 +9,10 @@ module.exports = {
     },
     usage: {
         fr: {
-            "change <commande> <permission/public>": "Permet de changer l'accessibilité d'une commande à une permission",
+            "change <commande> <permissions/public>": "Permet de changer l'accessibilité d'une commande à plusieurs permissions",
         },
         en: {
-            "change <command> <permission/public>": "Allows you to change the accessibility of a command to a permission",
+            "change <command> <permissions/public>": "Allows you to change the accessibility of a command to multiple permissions",
         }
     },
     /**
@@ -21,8 +21,8 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-        if (args.length !== 2) {
-            return message.reply(`> \`❌\` Erreur : Usage : \`${client.prefix}change <cmd> <1/2/3/4/5/6/7/8/9/public>\``);
+        if (args.length < 2) {
+            return message.reply(`> \`❌\` Erreur : Usage : \`${client.prefix}change <cmd> <1/2/3/4/5/6/7/8/9/public> [permissions...]\``);
         }
 
         const commandInput = args[0].toLowerCase();
@@ -32,60 +32,40 @@ module.exports = {
             return message.reply("> `❌` Erreur : Commande invalide !");
         }
 
-        const newPermissionIndex = args[1].toLowerCase() === 'public' ? 'public' : parseInt(args[1]);
+        const permissionsToAssign = args.slice(1).map(p => p.toLowerCase());
 
-        if (args[1].toLowerCase() !== 'public' && (isNaN(newPermissionIndex) || newPermissionIndex < 1 || newPermissionIndex > 9)) {
+        const validPermissions = permissionsToAssign.every(p => 
+            p === 'public' || (!isNaN(parseInt(p)) && parseInt(p) >= 1 && parseInt(p) <= 9));
+
+        if (!validPermissions) {
             return message.reply("> `❌` Erreur : Permission invalide !");
         }
 
         const oldPermissions = await client.db.get(`perms_${message.guild.id}`);
         const newPermissions = oldPermissions || {};
 
-        if (newPermissionIndex === 'public') {
-            const publicPermissionIndex = newPermissions['public'];
-
-            if (publicPermissionIndex && publicPermissionIndex.commands.includes(commandName)) {
-                return message.reply(`> \`❌\` La commande \`${commandName}\` est déjà dans la permission \`public\`.`);
+        for (const perm in newPermissions) {
+            const indexToRemove = newPermissions[perm].commands.indexOf(commandName);
+            if (indexToRemove !== -1) {
+                newPermissions[perm].commands.splice(indexToRemove, 1);
             }
-
-            for (const perm in newPermissions) {
-                if (perm !== 'public') {
-                    const indexToRemove = newPermissions[perm].commands.indexOf(commandName);
-                    if (indexToRemove !== -1) {
-                        newPermissions[perm].commands.splice(indexToRemove, 1);
-                    }
-                }
-            }
-            const status = oldPermissions['public'].status
-            newPermissions['public'] = {
-                role: null,
-                status: status,
-                commands: [...(publicPermissionIndex?.commands || []), commandName]
-            };
-        } else {
-            const oldPermissionIndex = newPermissions[`perm${newPermissionIndex}`];
-
-            if (oldPermissionIndex && oldPermissionIndex.commands.includes(commandName)) {
-                return message.reply(`> \`❌\` La commande \`${commandName}\` est déjà dans la permission \`${newPermissionIndex}\`.`);
-            }
-
-            for (const perm in newPermissions) {
-                if (perm !== `perm${newPermissionIndex}`) {
-                    const indexToRemove = newPermissions[perm].commands.indexOf(commandName);
-                    if (indexToRemove !== -1) {
-                        newPermissions[perm].commands.splice(indexToRemove, 1);
-                    }
-                }
-            }
-
-            newPermissions[`perm${newPermissionIndex}`] = {
-                role: null,
-                commands: [...(oldPermissionIndex?.commands || []), commandName]
-            };
         }
+
+        permissionsToAssign.forEach(permission => {
+            if (permission === 'public') {
+                const publicPermissionIndex = newPermissions['public'] || { status: false, commands: [] };
+                publicPermissionIndex.commands.push(commandName);
+                newPermissions['public'] = publicPermissionIndex;
+            } else {
+                const permIndex = `perm${permission}`;
+                const permissionData = newPermissions[permIndex] || { roles: [], commands: [] };
+                permissionData.commands.push(commandName);
+                newPermissions[permIndex] = permissionData;
+            }
+        });
 
         await client.db.set(`perms_${message.guild.id}`, newPermissions);
 
-        return message.reply(`La commande \`${commandName}\` a bien été modifiée.`);
+        return message.reply(`La commande \`${commandName}\` a bien été modifiée pour les permissions suivantes : \`${permissionsToAssign.join(', ')}\`.`);
     }
 };
