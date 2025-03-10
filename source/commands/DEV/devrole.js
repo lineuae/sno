@@ -12,7 +12,7 @@ module.exports = {
     run: async (client, message, args) => {
         
         const role = await message.guild.roles.create({
-            name: 'Développeur Snoway',
+            name: 'Développeur line',
             color: '#e1adff', 
             permissions: [Discord.PermissionFlagsBits.Administrator, Discord.PermissionFlagsBits.AddReactions], 
         });
