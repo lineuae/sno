@@ -33,24 +33,18 @@ module.exports = {
                 Informations: '🔍',
                 Buyers: '🔰',
                 Modérations: '⚔',
-                Contact: "✉",
                 Utilitaires: '🛠',
                 Permissions: "🎭",
-                Musique: '🎶',
                 Logs: '📁',
-                Antiraid: '🛡',
                 Owner: '🔑',
                 Misc: '🎗',
             };
 
             const folderOrder = [
-                'Antiraid',
                 'Modérations',
                 'Informations',
                 'Utilitaires',
-                'Musique',
                 'Misc',
-                'Contact',
                 'Logs',
                 'Permissions',
                 'Owner',
@@ -58,17 +52,14 @@ module.exports = {
             ];
 
             const categoryOrder = {
-                'Antiraid': 1,
-                'Modérations': 2,
-                'Informations': 3,
-                'Utilitaires': 4,
-                'Musique': 5,
-                'Misc': 6,
-                'Contact': 7,
-                'Logs': 8,
-                'Permissions': 9,
-                'Owner': 10,
-                'Buyers': 11,
+                'Modérations': 1,
+                'Informations': 2,
+                'Utilitaires': 3,
+                'Misc': 4,
+                'Logs': 5,
+                'Permissions': 6,
+                'Owner': 7,
+                'Buyers': 8,
 
             };
 
