@@ -13,6 +13,11 @@ function countLinesInFile(filePath) {
 }
 
 function countLinesInFolder(folderPath) {
+  // Vérifier si le dossier existe
+  if (!fs.existsSync(folderPath)) {
+    return 0;
+  }
+
   const files = fs.readdirSync(folderPath, { withFileTypes: true });
 
   let totalLines = 0;

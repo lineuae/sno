@@ -16,12 +16,16 @@
 ### 3. Variables d'environnement
 Dans la section "Environment Variables", ajoutez les variables suivantes :
 
-| Key | Value |
-|-----|-------|
-| `DISCORD_TOKEN` | Votre token Discord |
-| `BOT_ID` | L'ID de votre bot |
-| `PREFIX` | Le préfixe des commandes (par défaut: `-`) |
-| `COLOR` | La couleur des embeds (par défaut: `#808080`) |
+| Key | Value | Obligatoire |
+|-----|-------|-------------|
+| `DISCORD_TOKEN` | Votre token Discord | ✅ Oui |
+| `BOT_ID` | L'ID de votre bot | ✅ Oui |
+| `PREFIX` | Le préfixe des commandes (ex: `-`) | ❌ Non (défaut: `-`) |
+| `COLOR` | La couleur des embeds (ex: `#808080`) | ❌ Non (défaut: `#808080`) |
+
+**⚠️ Important pour COLOR** : 
+- Doit être au format hexadécimal avec le `#` (exemple: `#808080`)
+- Si vous ne définissez pas cette variable, la couleur par défaut sera utilisée
 
 ### 4. Déploiement
 - Cliquez sur "Create Web Service"
