@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 module.exports = {
     name: 'member',
@@ -84,7 +84,7 @@ module.exports = {
 
         const user = await client.functions.bot.user(cible.id)
         const embed = new Discord.EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setFooter(client.footer)
             .setThumbnail(`https://cdn.discordapp.com/avatars/${cible.id}/${user.avatar}`)
             .setImage(user.banner ? `https://cdn.discordapp.com/banners/${cible.id}/${user.banner}.webp?size=4096` : null)

@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
+﻿const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js');
 const Snoway = require('../../structures/client/index');
 
 module.exports = {
@@ -42,7 +42,7 @@ module.exports = {
             }
 
             const embed = new EmbedBuilder()
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setThumbnail(message.guild.iconURL())
                 .setTitle("Helpall - Snoway")
                 .addFields(

@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 module.exports = {
     name: "owner",
@@ -50,7 +50,7 @@ module.exports = {
 
             const embed = new Discord.EmbedBuilder()
                 .setAuthor({ name: await client.lang('owner.embed.title') + ' (' + owner.length + ')', iconURL: message.author.avatarURL() })
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setDescription(`\`\`\`js\n${ownersList}\`\`\``)
                 .setFooter(client.footer);
 

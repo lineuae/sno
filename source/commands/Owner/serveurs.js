@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const { ActionRowBuilder, ButtonBuilder, EmbedBuilder } = require("discord.js")
 const Snoway = require('../../structures/client/index');
 
@@ -29,7 +29,7 @@ module.exports = {
 
 
         const embed = new EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setTitle(await client.lang('server.embed.title'))
             .setDescription(`${await client.lang('server.embed.description')}\n` + guildInvites.join('\n'))
             .setFooter({ text: client.footer.text + ` | ${client.prefix}leave <guild id>` });

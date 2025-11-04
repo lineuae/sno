@@ -28,7 +28,7 @@ module.exports = {
             .addComponents(selectMenu);
 
         const embed = new EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setTitle('SetHelp')
             .setDescription(await client.lang("sethelp.description"));
 

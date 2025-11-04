@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+﻿const { EmbedBuilder } = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -51,7 +51,7 @@ module.exports = {
                 .setTitle("Blacklist")
                 .setDescription(blacklist.map(entry => `<@${entry.userId}>`).join('\n') || "None")
                 .setFooter(client.footer)
-                .setColor(client.color);
+                .setColor(client.config.color);
     
             return message.channel.send({ embeds: [blacklistEmbed] });
         }

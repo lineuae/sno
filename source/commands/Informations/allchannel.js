@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index');
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
      */
     run: async (client, message, args) => {
         try {
-            const color = parseInt(client.color.replace("#", ""), 16);
+            const color = parseInt(client.config.color.replace("#", ""), 16);
             const allChannels = message.guild.channels.cache;
 
             const channelList = allChannels.map((channel) => {

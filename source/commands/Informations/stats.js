@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require("../../structures/client/index")
 module.exports = {
     name: 'stats',
@@ -19,7 +19,7 @@ module.exports = {
         const boosts = message.guild.premiumSubscriptionCount;
 
         const embed = new Discord.EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setThumbnail(message.guild.iconURL())
             .setTitle(message.guild.name + ' ➔ Statistiques')
             .setDescription(

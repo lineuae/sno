@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -17,7 +17,7 @@ module.exports = {
     const permissions = await client.db.get(`perms_${message.guild.id}`);
     const embed = new Discord.EmbedBuilder()
       .setTitle('Permissions')
-      .setColor(client.color);
+      .setColor(client.config.color);
 
     for (let i = 1; i <= 9; i++) {
       const permnames = `perm${i}`;

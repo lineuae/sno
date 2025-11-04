@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -27,7 +27,7 @@ module.exports = {
         }
 
         const snipeEmbed = new Discord.EmbedBuilder()
-        .setColor(client.color)
+        .setColor(client.config.color)
         .setFooter(client.footer)
         .setAuthor({name: user.discriminator !== 0 ? user.tag : user.username, iconURL: user.avatarURL()})
         .addFields({name: `${snipe.content}`, value: `<t:${Math.floor(snipe.timestamp / 1000)}:R>`})

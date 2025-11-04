@@ -35,7 +35,7 @@ module.exports = {
             const salon = client.channels.cache.get(db.salon) || "Aucun"
 
             const embed = new Discord.EmbedBuilder()
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setTitle('Paramètre du giveaway')
                 .addFields(
                     { name: "Gain", value: `\`\`\`js\n${db.prix}\`\`\``, inline: true },
@@ -141,7 +141,7 @@ module.exports = {
                     const code = await client.functions.bot.code()
     
                     const embed = new Discord.EmbedBuilder()
-                    .setColor(client.color)
+                    .setColor(client.config.color)
                     .setFooter({text: "Giveaway code: " + code})
                     .setTitle('Giveaway: ' + db.prix)
                     .setDescription(`Réagissez sur le button pour participer !\nNombre de gagnants : 1`)

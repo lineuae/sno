@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -19,7 +19,7 @@ module.exports = {
         const guild = message.guild
         const Vanity = await guild.fetchVanityData().catch(e => { return null });
         const embed = new Discord.EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setFooter(client.footer)
             .setThumbnail(message.guild.iconURL())
             .setAuthor({ name: message.guild.name, iconURL: message.guild.iconURL() })

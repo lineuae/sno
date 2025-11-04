@@ -1,4 +1,4 @@
-const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js')
+﻿const { EmbedBuilder, ActionRowBuilder, ButtonBuilder } = require('discord.js')
 const Snoway = require('../../structures/client/index')
 const Discord = require('discord.js')
 module.exports = {
@@ -130,7 +130,7 @@ module.exports = {
 
         const url = await user.fetch().then((user) => user.bannerURL({ format: "png", dynamic: true, size: 4096 }));
         const embed = new EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setTitle(`Informations sur ${user.username}`)
             .setThumbnail(user.avatarURL())
             .setDescription(`**__Informations Principales__**\n${infomembre}\n\n**__Activité(s) en cours__**\n\n> **Status:** (\`${status}\`) \`${statusperso}\`\n> **Platforme:** \`${platfor || "Aucune"}\`\n> **Activité: ${activities.length !== 0 ? `(${activities.length})` : ""}**\n${activities.join('\n') || "> - **Aucune activité**"}\n\n__**Informations sur le serveur**__ ${infoserv}`)

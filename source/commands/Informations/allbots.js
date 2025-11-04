@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder } = require('discord.js');
+﻿const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, EmbedBuilder } = require('discord.js');
 
 module.exports = {
   name: 'allbots',
@@ -28,7 +28,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle(`Liste des bots`)
         .setDescription(botList)
-        .setColor(client.color)
+        .setColor(client.config.color)
         .setFooter({ text: `Page ${currentPage}/${pageCount}\nTotal: ${botMembers.size}\nServeur: ${message.guild.name}` });
 
 

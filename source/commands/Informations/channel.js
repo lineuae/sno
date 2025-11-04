@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
                 break;
         }
         const embed = new Discord.EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setFooter(client.footer)
             .setTitle('Information du salon ' + channel.name)
             .setURL(`https://discord.com/channels/${message.guild.id}/${channel.id}`)

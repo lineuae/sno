@@ -32,7 +32,7 @@ module.exports = {
             }
             const embedList = embedNames.map(embed => embed.name).join('\n ');
             const embed = new Discord.EmbedBuilder()
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setFooter(client.footer)
                 .setDescription(embedList)
                 .setTitle(await client.lang('savembed.embed.title'))

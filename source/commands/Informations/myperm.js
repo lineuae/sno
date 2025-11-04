@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -69,7 +69,7 @@ module.exports = {
             .setTitle('Permissions de ' + message.author.username)
             .setURL(client.support)
             .setDescription(`\`\`\`js\n${allowedPermissions.join('\n') || "Aucune"}\`\`\``)
-            .setColor(client.color);
+            .setColor(client.config.color);
 
         message.channel.send({ embeds: [permissionsEmbed] });
     },

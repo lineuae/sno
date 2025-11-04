@@ -1,4 +1,4 @@
-const Snoway = require('../../structures/client/index');
+﻿const Snoway = require('../../structures/client/index');
 const Discord = require('discord.js');
 const OpenAI = require('openai');
 
@@ -38,7 +38,7 @@ module.exports = {
                 embeds: [
                     new Discord.EmbedBuilder()
                         .setDescription(completion.choices[0].message.content)
-                        .setColor(client.color)
+                        .setColor(client.config.color)
                         .setFooter({ text: "Snoway X Chatgpt" })
                 ],
                 content: null

@@ -43,7 +43,7 @@ module.exports = {
                 const date = new Date().toLocaleTimeString('fr-FR', { hour12: false });
                 const tiime = new Date().toLocaleDateString().replace(/\//g, '-');
                 const embed = new EmbedBuilder()
-                    .setColor(client.color)
+                    .setColor(client.config.color)
                     .setTitle(`Avertissements de ${user.tag}`)
                     .setFooter({
                         text: client.footer.text + ` • Total de sanction: ${warns.length}`

@@ -28,7 +28,7 @@ module.exports = {
         const banListMessage = await message.channel.send({
             embeds: [
                 new EmbedBuilder()
-                    .setColor(client.color)
+                    .setColor(client.config.color)
                     .setTitle(`Liste des bannissement`)
                     .setDescription(`${banList.join('\n')}`)
                     .setFooter({ text: `Page ${currentPage}/${pageCount} - Total ${bans.size} banni` })
@@ -114,7 +114,7 @@ module.exports = {
             const newBanListMessage = {
                 embeds: [
                     new EmbedBuilder()
-                        .setColor(client.color)
+                        .setColor(client.config.color)
                         .setTitle(`Liste des bannissement`)
                         .setDescription(`${newBanList.join('\n')}`)
                         .setFooter({ text: `Page ${currentPage}/${pageCount} - Total ${bans.size} banni` })

@@ -25,7 +25,7 @@ module.exports = {
             client.db.set(`unbanall_${message.guild.id}`, unbanall);
 
             const embed = new Discord.EmbedBuilder()
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setDescription(`**${bans.size}** membres ont été débannis avec succès. Utilisez \`${client.prefix}cancelunbanall\` pour annuler.`)
                 .setFooter(client.footer)
             message.reply({ embeds: [embed], allowedMentions: { repliedUser: false } });

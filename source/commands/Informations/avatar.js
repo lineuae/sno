@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+﻿const { EmbedBuilder } = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -40,7 +40,7 @@ module.exports = {
       }
   
       const embed = new EmbedBuilder()
-        .setColor(client.color)
+        .setColor(client.config.color)
         .setAuthor({name: `${target?.username}`, iconURL: target.avatarURL({ format: 'png', size: 4096, dynamic: true }), url: client.support})
         .setImage(target.avatarURL({ format: 'png', size: 4096, dynamic: true }))
         .setFooter(client.footer);

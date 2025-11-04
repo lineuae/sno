@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index')
 module.exports = {
     name: "boosters",
@@ -26,7 +26,7 @@ module.exports = {
         let boostE = new Discord.EmbedBuilder()
             .setTitle('Liste des boosters')
             .setDescription(desc || "Aucun booster")
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setFooter({
                 text: message.guild.premiumSubscriptionCount + " boosts actuel",
                 iconURL: message.guild.iconURL()

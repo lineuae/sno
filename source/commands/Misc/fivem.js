@@ -1,4 +1,4 @@
-const {EmbedBuilder, Message} = require('discord.js');
+﻿const {EmbedBuilder, Message} = require('discord.js');
 const Snoway = require('../../structures/client');
 module.exports = {
   name: 'fivem',
@@ -40,7 +40,7 @@ module.exports = {
 
 async function embed(client) {
   const embed = new EmbedBuilder()
-    .setColor(client.color)
+    .setColor(client.config.color)
     .setFooter(client.footer);
 
   try {

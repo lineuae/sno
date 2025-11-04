@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+﻿const { EmbedBuilder } = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -20,7 +20,7 @@ module.exports = {
     const membersInVoice = membersGuild.filter(member => member.voice.channel);
 
     const embed = new EmbedBuilder()
-      .setColor(client.color)
+      .setColor(client.config.color)
       .setFooter(client.footer)
       .setThumbnail(message.guild.iconURL())
       .setTitle(`${message.guild.name} ➔ Statistiques`)

@@ -22,7 +22,7 @@ module.exports = {
         async function update() {
             const db = await client.db.get(`ghostjoin_${message.guild.id}`) || []
             const embed = new Discord.EmbedBuilder()
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setFooter(client.footer)
                 .setTitle('Salons ghostjoin')
                 .setDescription('```js\n'+ (db.map(channel => `${client.channels.cache.get(channel)?.name || "Inconnu"} (ID: ${client.channels.cache.get(channel)?.id || "Inconnu"})`).join('\n') || "Aucun") + '```');

@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+﻿const { EmbedBuilder } = require('discord.js');
 const Discord = require('discord.js')
 const Snoway = require('../../structures/client/index')
 
@@ -26,7 +26,7 @@ module.exports = {
         ]
 
         const embed = new EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setFooter(client.footer)
             .setTitle(`Logs de ${message.guild.name}`)
             .addFields(

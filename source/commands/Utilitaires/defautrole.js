@@ -34,7 +34,7 @@ module.exports = {
                 return `${index + 1}) <@&${role}>`
             }).join("\n")
             const embed = new EmbedBuilder()
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setFooter(client.footer)
                 .setTitle(await client.lang('defautrole.embed.title'))
                 .setDescription(role || await client.lang('defautrole.embed.aucun'))

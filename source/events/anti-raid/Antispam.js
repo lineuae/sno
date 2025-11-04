@@ -97,7 +97,7 @@ function sendNtm(client, userIds, channelId, userDataArray, db) {
         .addFields({ name: "・Utilisateurs", value: `\`\`\`py\n${mentionUsers}\`\`\`` })
         .addFields({ name: "・Sanction", value: `\`\`\`py\n${db.sanction}\`\`\`` })
         .addFields({ name: "・Modifications apportées", value: "\`\`\`py\nMessages contenants du spam\`\`\`" })
-        .setColor(client.color);
+        .setColor(client.config.color);
     const logsChannel = client.channels.cache.get(db.logs.channel)
     if (db.logs.status && logsChannel) {
         logsChannel?.send({ embeds: [embed] })

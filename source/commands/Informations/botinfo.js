@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const os = require('os');
 const Snoway = require('../../structures/client/index.js');
 
@@ -28,7 +28,7 @@ module.exports = {
         const usedMemory = format(os.totalmem() - os.freemem())
         const embed = new Discord.EmbedBuilder()
             .setTitle('Mes statistiques')
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setFooter({text: "Botinfo inspiré de celui de Caredas"})
             .addFields({
                 name: "Statistique du bot", 

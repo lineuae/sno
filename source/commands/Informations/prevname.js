@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js');
+﻿const { EmbedBuilder } = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -41,7 +41,7 @@ module.exports = {
         }
 
         const embed = new EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setTitle(author ? "Vos Prevname" : `Prevname de ${member.username || member.user.username}`)
             .setDescription(prev.prevnames.map((entry, index) => `**${index + 1} -** <t:${Math.floor(entry.temps)}:d> - [\`${entry.prevname}\`](https://discord.com/users/${userId})`).join('\n'))
             .setFooter({ text: client.footer.text, iconURL: message.guild.iconURL() });

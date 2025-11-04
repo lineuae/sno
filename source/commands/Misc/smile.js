@@ -1,4 +1,4 @@
-const Discord = require('discord.js')
+﻿const Discord = require('discord.js')
 const Snoway = require('../../structures/client/index')
 module.exports = {
   name: 'smile',
@@ -23,7 +23,7 @@ module.exports = {
       const embed = new Discord.EmbedBuilder()
         .setDescription(`${targetUser}, sourit :smile:`)
         .setImage(imageLink)
-        .setColor(client.color);
+        .setColor(client.config.color);
 
       message.channel.send({ embeds: [embed] });
     } else {

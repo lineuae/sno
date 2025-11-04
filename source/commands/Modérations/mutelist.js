@@ -28,7 +28,7 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setTitle(`List des mute de ${message.guild.name}`)
         .setDescription(muteList)
-        .setColor(client.color)
+        .setColor(client.config.color)
         .setFooter({ text: `${client.footer.text} | ${currentPage}/${pageCount}` });
 
       const row = new ActionRowBuilder().addComponents(

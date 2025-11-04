@@ -1,4 +1,4 @@
-const { EmbedBuilder } = require('discord.js')
+﻿const { EmbedBuilder } = require('discord.js')
 const Snoway = require('../../structures/client/index')
 
 module.exports = {
@@ -18,7 +18,7 @@ module.exports = {
     run: async (client, message, args) => {
 
         await message.channel.send({
-            embeds: [new EmbedBuilder().setColor(client.color).setDescription(`[Clique ici pour rejoindre le support Snoway Bots](${client.support})`)]
+            embeds: [new EmbedBuilder().setColor(client.config.color).setDescription(`[Clique ici pour rejoindre le support Snoway Bots](${client.support})`)]
         })
     }
 }

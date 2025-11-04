@@ -1,4 +1,4 @@
-const Discord = require('discord.js')
+﻿const Discord = require('discord.js')
 const Snoway = require('../../structures/client/index')
 
 module.exports = {
@@ -24,7 +24,7 @@ module.exports = {
             const embed = new Discord.EmbedBuilder()
                 .setDescription(`**${message.author.username}** fait un **Calin** à <@${targetUser.id}> :people_hugging:`)
                 .setImage(imageLink)
-                .setColor(client.color);
+                .setColor(client.config.color);
 
             message.channel.send({ embeds: [embed] });
         } else {

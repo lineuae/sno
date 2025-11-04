@@ -22,7 +22,7 @@ module.exports = {
 
             const embed = new Discord.EmbedBuilder()
             .setTitle('Paramètre du rôle menu')
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setFooter(client.footer)
             .addFields(
                 {name: "Channel", value: `\`\`\`js\n${client.channels.cache.get(db.channel)?.name ? `${client.channels.cache.get(db.channel).name} (${client.channels.cache.get(db.channel).id})` : "Inconnue"}\`\`\``}

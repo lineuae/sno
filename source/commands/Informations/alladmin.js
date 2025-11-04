@@ -1,4 +1,4 @@
-const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, Message, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
+﻿const { ActionRowBuilder, ButtonBuilder, ButtonStyle, ComponentType, Message, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const {Snoway} = require('../../structures/client/index')
 module.exports = {
     name: 'alladmin',
@@ -33,7 +33,7 @@ module.exports = {
             const embed = new EmbedBuilder()
                 .setTitle(`Liste des administrateurs`)
                 .setDescription(adminList)
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setFooter({ text: `Page ${currentPage}/${pageCount}\nTotal: ${adminMembers.size}\nServeur: ${message.guild.name}` });
 
                 const row = new ActionRowBuilder().addComponents(

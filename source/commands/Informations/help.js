@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const fs = require('fs');
 const Snoway = require('../../structures/client/index.js');
 module.exports = {
@@ -121,7 +121,7 @@ module.exports = {
                     });
 
                     const embed = new Discord.EmbedBuilder()
-                        .setColor(client.color)
+                        .setColor(client.config.color)
                         .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
                         .setFooter(client.footer)
                         .setDescription(`${aide}\n` + categoryCommands.join(''));
@@ -230,7 +230,7 @@ module.exports = {
                     });
 
                     const embed = new Discord.EmbedBuilder()
-                        .setColor(client.color)
+                        .setColor(client.config.color)
                         .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
                         .setFooter(client.footer)
                         .setDescription(`${aide}\n` + categoryCommands.join(''));
@@ -337,7 +337,7 @@ module.exports = {
                     });
             
                     const embed = new Discord.EmbedBuilder()
-                        .setColor(client.color)
+                        .setColor(client.config.color)
                         .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
                         .setFooter(client.footer)
                         .setDescription(`${aide}\n` + categoryCommands.join(''));
@@ -411,7 +411,7 @@ module.exports = {
                 const helptext = await client.lang('help.help')
                 const text = helptext.replace("{prefix}", `${client.prefix}`)
                 const embed = new Discord.EmbedBuilder()
-                    .setColor(client.color)
+                    .setColor(client.config.color)
                     .setAuthor({ name: "Snoway V3", url: client.user.avatarURL(), iconURL: client.user.avatarURL() })
                     .setDescription(`${await client.lang("help.prefix")} \`${client.prefix}\`\n${await client.lang("help.cmd")} \`${client.commands.size}\`\n${text}\n\n` + formattedCategories.join('\n\n'))
                     .setFooter(client.footer);
@@ -463,7 +463,7 @@ module.exports = {
             }
             const embed = new Discord.EmbedBuilder()
                 .setTitle(`${await client.lang('help.command')} ${client.functions.bot.maj(command.name)}`)
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setFooter(client.footer)
                 .addFields(fields);
             const row = new Discord.ActionRowBuilder()

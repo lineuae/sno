@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+﻿const Discord = require('discord.js');
 const axios = require('axios');
 const Snoway = require('../../structures/client/index');
 
@@ -33,7 +33,7 @@ module.exports = {
             const date = new Date(userData.join_date).getTime()
             const embed = new Discord.EmbedBuilder()
                 .setTitle(`${userData.username}'s osu Profile`)
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .addFields({ name: 'User ID', value: `${userData.user_id}` })
                 .addFields({ name: 'Total Score', value: `${userData.total_score || "Aucun Score"}` })
                 .addFields({ name: 'PP Rank', value: `${userData.pp_rank || "Aucun Score"}` })

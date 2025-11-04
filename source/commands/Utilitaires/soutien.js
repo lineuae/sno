@@ -95,7 +95,7 @@ module.exports = {
         async function update() {
             const role = message.guild.roles.cache.get(db.role);
             const embed = new Discord.EmbedBuilder()
-                .setColor(client.color)
+                .setColor(client.config.color)
                 .setFooter(client.footer)
                 .setTitle(await client.lang('soutien.embed.title'))
                 .addFields(

@@ -169,7 +169,7 @@ module.exports = {
       }));
 
       const embed = new EmbedBuilder()
-        .setColor(client.color)
+        .setColor(client.config.color)
         .setFooter({ text: `${client.footer.text} • ${page}/${totalPages} | ${totalBackups} backups` })
         .setDescription(backupList.join('\n'))
         .setTitle(await client.lang('backup.list.embed.title'));
@@ -246,7 +246,7 @@ module.exports = {
         }));
 
         const updatedEmbed = new EmbedBuilder()
-          .setColor(client.color)
+          .setColor(client.config.color)
           .setFooter({ text: `${client.footer.text} • ${page}/${totalPages} | ${totalBackups} backups` })
           .setDescription(updatedBackupList.join('\n'))
           .setTitle(await client.lang('backup.list.embed.title'));
@@ -396,7 +396,7 @@ module.exports = {
               })
       )).filter(Boolean).join(" / ");
         const embed = new EmbedBuilder()
-          .setColor(client.color)
+          .setColor(client.config.color)
           .setTitle(await client.lang('backup.load.embed.title'))
           .setFooter(client.footer)
           .setDescription(`**${await client.lang('backup.load.embed.description')}**\`\`\`js\n` +

@@ -22,7 +22,7 @@ module.exports = {
         }
         const embed = new Discord.EmbedBuilder()
             .setTitle(await client.lang('mybot.embed.title'))
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setFooter(client.footer);
             let description = ""
           

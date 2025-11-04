@@ -17,7 +17,7 @@ module.exports = {
      */
     run: async (client, message, args) => {
         const embed = new EmbedBuilder()
-            .setColor(client.color)
+            .setColor(client.config.color)
             .setDescription('** **');
 
         const row = new ActionRowBuilder()
