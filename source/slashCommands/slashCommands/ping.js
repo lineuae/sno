@@ -8,7 +8,7 @@ module.exports = {
     "fr": "Affiche la latence du bot", 
     "en-US": "Displays bot latency"
 },
-  type: "1",
+  type: 1,
   /**
    * 
    * @param {Snoway} client 
