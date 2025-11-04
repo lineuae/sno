@@ -39,9 +39,13 @@ Dans la section "Environment Variables", ajoutez les variables suivantes :
    - Database Access > Add New Database User
    - Choisissez un nom d'utilisateur et mot de passe **SÉCURISÉ**
    - Permissions: "Read and write to any database"
-5. Autorisez l'accès réseau :
-   - Network Access > Add IP Address
-   - Cliquez sur "Allow Access from Anywhere" (0.0.0.0/0)
+5. Autorisez l'accès réseau (IMPORTANT) :
+   - Allez dans **Network Access** (menu de gauche)
+   - Cliquez sur **"Add IP Address"**
+   - Cliquez sur **"Allow Access from Anywhere"**
+   - Confirmez avec **"0.0.0.0/0"** (permet toutes les IPs)
+   - Cliquez sur **"Confirm"**
+   - ⚠️ Cette étape est OBLIGATOIRE pour Render car l'IP change à chaque redémarrage
 6. Obtenez l'URI de connexion :
    - Database > Connect > Connect your application
    - Copiez l'URI et remplacez `<username>` et `<password>`
