@@ -2,7 +2,7 @@ const Snoway = require('../../structures/client/index');
 const Discord = require('discord.js')
 
 module.exports = {
-  name: "ready",
+  name: "clientReady",
   /**
    * 
    * @param {Snoway} client 
