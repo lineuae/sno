@@ -3,7 +3,7 @@ const Snoway = require("../../structures/client/index");
 const ms = require('../../structures/Utils/ms');
 
 module.exports = {
-    name: "ready",
+    name: "clientReady",
     /**
      * @param {Snoway} client
      */

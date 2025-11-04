@@ -14,7 +14,7 @@ const ligne = require('../../structures/Utils/ligne');
 const { mind } = require('gradient-string');
 
 module.exports = {
-  name: 'ready',
+  name: 'clientReady',
   /**
 * 
 * @param {Snoway} client 

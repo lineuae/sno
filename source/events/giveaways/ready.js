@@ -2,7 +2,7 @@ const ms = require('ms');
 const Discord = require('discord.js');
 
 module.exports = {
-    name: 'ready',
+    name: 'clientReady',
     /**
      * 
      * @param {import("../../structures/client")} client 
@@ -11,8 +11,11 @@ module.exports = {
         setInterval(async () => {
             const giveaways = await client.db.all();
             for (let giveaway of giveaways) {
-                if (giveaway.id.startsWith('giveaway_')) {
-                    const [, guildId, code] = giveaway.id.split('_');
+                // Vérifier que giveaway et giveaway.key existent
+                if (!giveaway || !giveaway.key) continue;
+                
+                if (giveaway.key.startsWith('giveaway_')) {
+                    const [, guildId, code] = giveaway.key.split('_');
                     giveaway = giveaway.value;
                     if (!giveaway.end && giveaway.endTime && Date.now() >= giveaway.endTime) {
                         const guild = client.guilds.cache.get(guildId);

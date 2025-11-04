@@ -2,7 +2,7 @@ const ms = require('ms');
 const Discord = require('discord.js');
 
 module.exports = {
-    name: 'ready',
+    name: 'clientReady',
     /**
      * 
      * @param {import("../../structures/client")} client 
