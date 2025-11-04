@@ -13,7 +13,7 @@ module.exports = {
             const presenceOptions = {
                 status: db?.status || 0,
                 activities: [{
-                    name: db?.name || "L'Émirati .gg/emirati",
+                    name: db?.name || "~",
                     type: db?.type || 4,
                     url: "https://twitch.tv/oni145"
 

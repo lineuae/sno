@@ -11,17 +11,21 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-        
-        message.channel.send({ content: 'Redémarrage...' }).then(async () => {
+        try {
+            await message.channel.send({ content: 'Redémarrage...' });
             await client.db.set(`restartchannel`, message.channel.id);
+            
+            // Tenter PM2 d'abord
             exec(`pm2 restart ${client.user.id}`, async (err, stdout, stderr) => {
-                if (err.code === 1) {
-                    return message.channel.send('Instance PM2 non existante...');
-                }
                 if (err) {
-                    message.channel.send("Une erreur vient de se produire : \`\`\`js\n" + err.message + "\`\`\`");
+                    // Si PM2 n'est pas disponible, redémarrer le processus directement
+                    console.log('PM2 non disponible, redémarrage du processus...');
+                    process.exit(0);
                 }
             });
-        })
+        } catch (error) {
+            console.error('Erreur:', error);
+            message.channel.send({ content: `Erreur: ${error.message}` });
+        }
     }
 };

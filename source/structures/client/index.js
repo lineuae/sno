@@ -116,7 +116,7 @@ module.exports = class Snoway extends Client {
           name: slashCommand.name,
           description: slashCommand.description ? slashCommand.description : null,
           description_localizations: slashCommand.description_localizations ? slashCommand.description_localizations : null,
-          type: slashCommand.type,
+          type: slashCommand.type ? parseInt(slashCommand.type) : 1,
           options: slashCommand.options ? slashCommand.options : null,
         });
       }

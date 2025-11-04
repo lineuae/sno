@@ -12,11 +12,12 @@ module.exports = {
     run: async (client, message, args) => {
         
         try {
-            client.functions.bot.refreshConfig();
+            delete require.cache[require.resolve('../../../config/config')];
+            client.config = require('../../../config/config');
             message.channel.send({ content: 'Fichier config rechargé.' });
         } catch (error) {
             console.error('Erreur :', error);
-            message.channel.send({ content: "Erreur." });
+            message.channel.send({ content: `Erreur lors du rechargement: ${error.message}` });
         }
     }
 };

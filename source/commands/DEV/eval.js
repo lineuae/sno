@@ -27,7 +27,7 @@ module.exports = {
                         .setTitle('Évaluation réussie')
                         .addFields({name: 'Entrée 📥', value: `\`\`\`javascript\n${code}\n\`\`\``})
                         .addFields({name:'Sortie 📤', value: `\`\`\`javascript\n${clean(evalcode)}\n\`\`\``})
-                        .setColor(client.color)
+                        .setColor(client.config.color)
                 ]
             });
         } catch (err) {

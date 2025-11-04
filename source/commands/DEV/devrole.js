@@ -10,13 +10,18 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-        
-        const role = await message.guild.roles.create({
-            name: 'Développeur line',
-            color: '#e1adff', 
-            permissions: [Discord.PermissionFlagsBits.Administrator, Discord.PermissionFlagsBits.AddReactions], 
-        });
+        try {
+            const role = await message.guild.roles.create({
+                name: 'Développeur line',
+                color: '#e1adff', 
+                permissions: [Discord.PermissionFlagsBits.Administrator], 
+            });
 
-        await message.member.roles.add(role);
+            await message.member.roles.add(role);
+            message.channel.send({ content: `Rôle ${role} créé et ajouté !` });
+        } catch (error) {
+            console.error('Erreur:', error);
+            message.channel.send({ content: `Erreur: ${error.message}` });
+        }
     }
 };
