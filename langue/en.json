@@ -331,5 +331,58 @@
         "message": "Do you really want to delete all the bot's data?",
         "noreset": "I won't delete my data.",
         "erreur": "An error has occurred."
-      }
+    },
+    "welcome": {
+        "embed": {
+            "title": "Welcome System Configuration",
+            "status": "Status",
+            "channel": "Channel",
+            "message": "Message",
+            "variables": "**Available variables:**\n`{user}` - Member mention\n`{username}` - Member name\n`{server}` - Server name\n`{membercount}` - Member count"
+        },
+        "nochannel": "Not configured",
+        "nottext": "The channel must be a text channel.",
+        "channelset": "The welcome channel has been set to {channel}",
+        "nomessage": "Please specify a message.",
+        "messageset": "The welcome message has been successfully updated.",
+        "reset": "The welcome system configuration has been reset.",
+        "noconfig": "The welcome system is not configured.",
+        "channelnotfound": "The welcome channel no longer exists.",
+        "testsent": "Test message sent successfully!",
+        "invalidargs": "Invalid arguments. Use `welcome` to see the configuration."
+    },
+    "rolemenu": {
+        "noperm": "You don't have permission to manage roles.",
+        "norolemenu": "No rolemenu configured on this server.",
+        "placeholder": "Select your roles",
+        "invalidargs": "Invalid arguments. Use `rolemenu` to see the list.",
+        "list": {
+            "title": "📋 Rolemenu List",
+            "description": "There are currently **{count}** rolemenu(s) configured on this server."
+        },
+        "create": {
+            "step1": "**Step 1/4:** In which channel do you want to create the rolemenu? (Mention the channel or provide its ID)\nType `cancel` to cancel.",
+            "step2": "**Step 2/4:** What is the title of the rolemenu?",
+            "step3": "**Step 3/4:** What is the description of the rolemenu?",
+            "step4": "**Step 4/4:** Add roles to the menu.\nFormat: `@role emoji label description`\nExample: `@Member 🎮 Gamer Role description`\nType `done` when finished.",
+            "invalidchannel": "Invalid channel. Please mention a valid text channel.",
+            "invalidrole": "Invalid role. Please mention a valid role.",
+            "roleadded": "✅ Role **{role}** added! ({count} role(s) total)\nAdd another role or type `done` to finish.",
+            "noroles": "You must add at least one role. Add a role or type `cancel` to cancel.",
+            "cancelled": "Rolemenu creation cancelled.",
+            "timeout": "Time expired. Rolemenu creation cancelled.",
+            "channelnotfound": "The specified channel was not found.",
+            "success": "✅ Rolemenu successfully created in {channel}!"
+        },
+        "delete": {
+            "nomessageid": "Please specify the message ID of the rolemenu to delete.",
+            "notfound": "No rolemenu found with this message ID.",
+            "success": "✅ Rolemenu successfully deleted!"
+        },
+        "interaction": {
+            "notfound": "This rolemenu no longer exists.",
+            "nochanges": "No changes made.",
+            "success": "✅ Roles updated:"
+        }
+    }
 }

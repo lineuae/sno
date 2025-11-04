@@ -1,10 +1,9 @@
 const { Client, Collection, Routes } = require("discord.js");
 const fs = require("fs");
 const version = require('../../../version')
-const { QuickDB } = require("quick.db")
+const MongoDB = require('../Database/mongodb');
 const { REST } = require('@discordjs/rest');
 const { readdirSync } = require('fs');
-const db = new QuickDB();
 const { Player } = require('discord-player');
 const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 identifyProperties.browser = "Discord Android"
@@ -43,7 +42,7 @@ module.exports = class Snoway extends Client {
     this.footer = {text: "emirati V3 by line and node"}
     this.dev = ["403174893707067392", "888538191701893150"],
     this.version = version;
-    this.db = db
+    this.db = new MongoDB();
     this.api = this.functions.api
 
     this.CommandLoad();
@@ -93,11 +92,24 @@ module.exports = class Snoway extends Client {
       });
     }
   }
-  connect() {
+  async connect() {
+    try {
+      // Connexion à MongoDB
+      const mongoUri = process.env.MONGODB_URI;
+      if (mongoUri) {
+        await this.db.connect(mongoUri);
+      } else {
+        console.warn('[WARNING] ⚠️ MONGODB_URI non défini dans .env - Les données ne seront pas persistantes!');
+      }
+    } catch (error) {
+      console.error('[ERROR] Erreur lors de la connexion à MongoDB:', error);
+      console.warn('[WARNING] ⚠️ Le bot continuera sans base de données persistante');
+    }
+
     return super.login(this.config.token).catch(async (err) => {
       console.log(err)
     }).then(() => {
-      this.database = new (require("../Database/index"))(this, db);
+      this.database = new (require("../Database/index"))(this, this.db);
     })
   };
 

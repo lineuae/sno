@@ -329,7 +329,59 @@
         "message": "Voulez-vous vraiment supprimer toutes les données du bot ?",
         "noreset": "Je ne supprimerai pas mes données.",
         "erreur": "Une erreur s'est produite."
-      }
-    
+    },
+    "welcome": {
+        "embed": {
+            "title": "Configuration du système de bienvenue",
+            "status": "Statut",
+            "channel": "Salon",
+            "message": "Message",
+            "variables": "**Variables disponibles:**\n`{user}` - Mention du membre\n`{username}` - Nom du membre\n`{server}` - Nom du serveur\n`{membercount}` - Nombre de membres"
+        },
+        "nochannel": "Non configuré",
+        "nottext": "Le salon doit être un salon textuel.",
+        "channelset": "Le salon de bienvenue a été défini sur {channel}",
+        "nomessage": "Veuillez spécifier un message.",
+        "messageset": "Le message de bienvenue a été modifié avec succès.",
+        "reset": "La configuration du système de bienvenue a été réinitialisée.",
+        "noconfig": "Le système de bienvenue n'est pas configuré.",
+        "channelnotfound": "Le salon de bienvenue n'existe plus.",
+        "testsent": "Message de test envoyé avec succès !",
+        "invalidargs": "Arguments invalides. Utilisez `welcome` pour voir la configuration."
+    },
+    "rolemenu": {
+        "noperm": "Vous n'avez pas la permission de gérer les rôles.",
+        "norolemenu": "Aucun rolemenu configuré sur ce serveur.",
+        "placeholder": "Sélectionnez vos rôles",
+        "invalidargs": "Arguments invalides. Utilisez `rolemenu` pour voir la liste.",
+        "list": {
+            "title": "📋 Liste des Rolemenus",
+            "description": "Il y a actuellement **{count}** rolemenu(s) configuré(s) sur ce serveur."
+        },
+        "create": {
+            "step1": "**Étape 1/4:** Dans quel salon voulez-vous créer le rolemenu ? (Mentionnez le salon ou donnez son ID)\nTapez `cancel` pour annuler.",
+            "step2": "**Étape 2/4:** Quel est le titre du rolemenu ?",
+            "step3": "**Étape 3/4:** Quelle est la description du rolemenu ?",
+            "step4": "**Étape 4/4:** Ajoutez des rôles au menu.\nFormat: `@role emoji label description`\nExemple: `@Membre 🎮 Joueur Description du rôle`\nTapez `done` quand vous avez fini.",
+            "invalidchannel": "Salon invalide. Veuillez mentionner un salon textuel valide.",
+            "invalidrole": "Rôle invalide. Veuillez mentionner un rôle valide.",
+            "roleadded": "✅ Rôle **{role}** ajouté ! ({count} rôle(s) au total)\nAjoutez un autre rôle ou tapez `done` pour terminer.",
+            "noroles": "Vous devez ajouter au moins un rôle. Ajoutez un rôle ou tapez `cancel` pour annuler.",
+            "cancelled": "Création du rolemenu annulée.",
+            "timeout": "Temps écoulé. Création du rolemenu annulée.",
+            "channelnotfound": "Le salon spécifié n'a pas été trouvé.",
+            "success": "✅ Rolemenu créé avec succès dans {channel} !"
+        },
+        "delete": {
+            "nomessageid": "Veuillez spécifier l'ID du message du rolemenu à supprimer.",
+            "notfound": "Aucun rolemenu trouvé avec cet ID de message.",
+            "success": "✅ Rolemenu supprimé avec succès !"
+        },
+        "interaction": {
+            "notfound": "Ce rolemenu n'existe plus.",
+            "nochanges": "Aucun changement effectué.",
+            "success": "✅ Rôles mis à jour :"
+        }
+    }
    
 }
