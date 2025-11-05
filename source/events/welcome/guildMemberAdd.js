@@ -30,8 +30,11 @@ module.exports = {
         }
 
         // Remplacer les variables dans le message
+        // Pour {user}, on le remplace temporairement pour savoir s'il est utilisé
+        const hasUserMention = welcomeConfig.message.includes('{user}');
+        
         const welcomeMessage = welcomeConfig.message
-            .replace(/{user}/g, `<@${member.id}>`)
+            .replace(/{user}/g, member.toString()) // Utilise member.toString() pour une vraie mention
             .replace(/{username}/g, member.user.username)
             .replace(/{server}/g, member.guild.name)
             .replace(/{membercount}/g, member.guild.memberCount.toString());
@@ -45,7 +48,14 @@ module.exports = {
             .setTimestamp();
 
         try {
-            await channel.send({ embeds: [embed] });
+            // Si le message contient {user}, on envoie aussi la mention en dehors de l'embed
+            // pour s'assurer que la notification fonctionne
+            const messageOptions = { embeds: [embed] };
+            if (hasUserMention) {
+                messageOptions.content = member.toString();
+            }
+            
+            await channel.send(messageOptions);
             console.log(`[Welcome] Message sent for ${member.user.tag} in ${member.guild.name}`);
         } catch (error) {
             console.error(`[Welcome] Error sending welcome message:`, error);

@@ -45,47 +45,30 @@ module.exports = {
                 }
 
                 const member = interaction.member;
-                const selectedRoles = interaction.values;
-                const menuRoles = menu.roles.map(r => r.roleId);
-
-                // Récupérer les rôles actuels du membre qui font partie de ce menu
-                const currentMenuRoles = member.roles.cache.filter(r => menuRoles.includes(r.id));
+                const selectedRoles = interaction.values; // Rôles sélectionnés dans le menu
                 
-                const rolesToAdd = [];
-                const rolesToRemove = [];
-
-                // Déterminer quels rôles ajouter et retirer
-                for (const roleId of menuRoles) {
-                    const hasRole = currentMenuRoles.has(roleId);
-                    const isSelected = selectedRoles.includes(roleId);
-
-                    if (isSelected && !hasRole) {
-                        rolesToAdd.push(roleId);
-                    } else if (!isSelected && hasRole) {
-                        rolesToRemove.push(roleId);
-                    }
-                }
-
-                // Appliquer les changements
                 const changes = [];
                 
-                for (const roleId of rolesToAdd) {
-                    try {
-                        await member.roles.add(roleId);
-                        const role = interaction.guild.roles.cache.get(roleId);
-                        changes.push(`✅ ${role.name}`);
-                    } catch (error) {
-                        console.error(`[ROLEMENU] Error adding role ${roleId}:`, error);
-                    }
-                }
+                // Pour chaque rôle sélectionné, on toggle (ajoute si pas présent, retire si présent)
+                for (const roleId of selectedRoles) {
+                    const role = interaction.guild.roles.cache.get(roleId);
+                    if (!role) continue;
 
-                for (const roleId of rolesToRemove) {
+                    const hasRole = member.roles.cache.has(roleId);
+
                     try {
-                        await member.roles.remove(roleId);
-                        const role = interaction.guild.roles.cache.get(roleId);
-                        changes.push(`❌ ${role.name}`);
+                        if (hasRole) {
+                            // Le membre a déjà le rôle, on le retire
+                            await member.roles.remove(roleId);
+                            changes.push(`❌ ${role.name} retiré`);
+                        } else {
+                            // Le membre n'a pas le rôle, on l'ajoute
+                            await member.roles.add(roleId);
+                            changes.push(`✅ ${role.name} ajouté`);
+                        }
                     } catch (error) {
-                        console.error(`[ROLEMENU] Error removing role ${roleId}:`, error);
+                        console.error(`[ROLEMENU] Error toggling role ${roleId}:`, error);
+                        changes.push(`⚠️ ${role.name} - Erreur`);
                     }
                 }
 
