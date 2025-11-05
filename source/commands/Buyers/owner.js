@@ -1,4 +1,4 @@
-﻿const Discord = require('discord.js');
+const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 module.exports = {
     name: "owner",
@@ -25,7 +25,7 @@ module.exports = {
         const owner = await client.db.get('owner') || [];
 
         if (args[0] === 'clear') {
-            await client.functions.api.ownerclear(client.user.id).then(async (response) => {
+            await client.api.ownerclear(client.user.id).then(async (response) => {
                 message.channel.send(await client.lang('owner.clear'));
                 await client.db.set('owner', []);
             }).catch(async error => {
@@ -69,7 +69,7 @@ module.exports = {
 
         if (ownerIndex !== -1) {
             owners.splice(ownerIndex, 1);
-            await client.functions.api.ownerdel(client.user.id, ownerId).then(async (response) => {
+            await client.api.ownerdel(client.user.id, ownerId).then(async (response) => {
                 await client.db.set('owner', owners);
                 return message.channel.send(`\`${member.username}\` ` + await client.lang('owner.deleteowner'));
             }).catch(async error => {
@@ -82,7 +82,7 @@ module.exports = {
             if (client.config.buyers.includes(ownerId)) {
                 return message.reply(await client.lang('owner.buyerowner'))
             }
-            await client.functions.api.owneradd(client.user.id, ownerId).then(async (response) => {
+            await client.api.owneradd(client.user.id, ownerId).then(async (response) => {
                 await client.db.set('owner', owners);
                 return message.channel.send(`\`${member.username}\` ` + await client.lang('owner.set'));
             }).catch(async error => {

@@ -18,7 +18,7 @@ module.exports = {
     run: async (client, interaction) => {
         await interaction.deferReply({ ephemeral: true });
         const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.color
-        const response = (await client.functions.api.botget(interaction.user.id)).bots || []
+        const response = (await client.api.botget(interaction.user.id)).bots || []
         if (response.length === 0) {
             return interaction.editReply({ content: await client.lang('mybot.aucun') });
         }

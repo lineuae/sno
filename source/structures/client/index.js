@@ -124,21 +124,35 @@ module.exports = class Snoway extends Client {
 
         this.slashCommands.set(slashCommand.name, slashCommand);
 
-        data.push({
+        const commandType = slashCommand.type ? parseInt(slashCommand.type) : 1;
+        
+        // Les commandes context (type 2 et 3) ne doivent PAS avoir de description
+        const commandData = {
           name: slashCommand.name,
-          description: slashCommand.description ? slashCommand.description : null,
-          description_localizations: slashCommand.description_localizations ? slashCommand.description_localizations : null,
-          type: slashCommand.type ? parseInt(slashCommand.type) : 1,
-          options: slashCommand.options ? slashCommand.options : null,
-        });
+          type: commandType,
+        };
+
+        // Ajouter description et options UNIQUEMENT pour les slash commands (type 1)
+        if (commandType === 1) {
+          commandData.description = slashCommand.description || "No description";
+          if (slashCommand.description_localizations) {
+            commandData.description_localizations = slashCommand.description_localizations;
+          }
+          if (slashCommand.options) {
+            commandData.options = slashCommand.options;
+          }
+        }
+
+        data.push(commandData);
       }
     });
 
     const rest = new REST({ version: '10' }).setToken(this.config.token);
     try {
       await rest.put(Routes.applicationCommands(this.config.botId), { body: data });
+      console.log('[SLASH] Commandes slash enregistrées avec succès');
     } catch (error) {
-      console.error(error);
+      console.error('[SLASH] Erreur lors de l\'enregistrement des commandes:', error);
     }
   }
 

@@ -34,7 +34,7 @@ module.exports = {
             return message.channel.send(await client.lang('unowner.nowoner'));
         }
 
-        await client.functions.api.ownerdel(client.user.id, ownerId).then(async (response) => {
+        await client.api.ownerdel(client.user.id, ownerId).then(async (response) => {
             const ownerIndex = owners.indexOf(ownerId);
             owners.splice(ownerIndex, 1);
             await client.db.set('owner', owners);

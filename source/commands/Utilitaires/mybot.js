@@ -16,7 +16,7 @@ module.exports = {
      * @returns 
      */
     run: async (client, message, args) => {
-        const response = (await client.functions.api.botget(message.author.id)).bots || []
+        const response = (await client.api.botget(message.author.id)).bots || []
         if (response.length === 0) {
             return message.reply({ content: await client.lang('mybot.aucun') });
         }

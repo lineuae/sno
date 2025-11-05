@@ -1,4 +1,4 @@
-﻿const { EmbedBuilder } = require('discord.js');
+const { EmbedBuilder } = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
@@ -19,18 +19,23 @@ module.exports = {
      * @param {Snoway} args 
      */
     run: async (client, message, args) => {
-        let member = message.mentions.members.first() || client.users.cache.get(args[0]) || message.author;
-
+        let member = message.mentions.members.first();
+        
         if (!member && args[0]) {
             try {
-                member = await client.users.fetch(args[0]);
+                const fetchedUser = await client.users.fetch(args[0]);
+                member = fetchedUser;
             } catch (error) {
                 console.error(error);
                 return message.channel.send(await client.lang('prevname.nouser'));
             }
         }
+        
+        if (!member) {
+            member = message.author;
+        }
 
-        const userId = member.id;
+        const userId = member.id || member.user?.id || member.id;
         const author = message.author.id === userId;
 
         const prev = await client.api.prevget(userId);

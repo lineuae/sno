@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
-    name: "Développeurs Snoway",
+    name: "Développeur Noria",
     type: 2,
     /**
      * @param {Snoway} client
@@ -14,7 +14,7 @@ module.exports = {
         const user = client.users.cache.get(targetId);
         const isDev = client.dev.includes(targetId);
         return interaction.editReply({
-            content: isDev ? `${user.username} est bien un développeur de Snoway.` : `${user.username} n'est pas un développeur de Snoway.`
+            content: isDev ? `${user.username} est bien un développeur de Noria` : `${user.username} n'est pas un développeur de Noria.`
         });
     }
 };
