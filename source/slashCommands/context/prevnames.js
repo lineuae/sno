@@ -9,12 +9,20 @@ module.exports = {
      * @param {Discord.Integration} interaction
      */
     run: async (client, interaction) => {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: Discord.MessageFlags.Ephemeral });
         const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.color
         const targetId = interaction.targetId
         const user = client.users.cache.get(targetId)
         const author = interaction.targetId === interaction.user.id
-        const prev = await client.api.prevget(targetId);
+        
+        let prev;
+        try {
+            prev = await client.api.prevget(targetId);
+        } catch (error) {
+            console.error('[PREVNAME] Erreur API:', error.message);
+            return interaction.editReply({ content: "❌ Impossible de récupérer les prevnames. L'API est temporairement indisponible." });
+        }
+        
         if (prev.prevnames.length === 0) {
             return interaction.editReply({
                 content: author ? "Vous n'avez pas de prevname." : `${user.username} n'a pas de prevname.`

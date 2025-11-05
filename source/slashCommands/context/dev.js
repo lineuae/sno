@@ -9,7 +9,7 @@ module.exports = {
      * @param {Discord.Integration} interaction
      */
     run: async (client, interaction) => {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: Discord.MessageFlags.Ephemeral });
         const targetId = interaction.targetId;
         const user = client.users.cache.get(targetId);
         const isDev = client.dev.includes(targetId);

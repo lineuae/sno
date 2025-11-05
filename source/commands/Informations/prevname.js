@@ -38,7 +38,14 @@ module.exports = {
         const userId = member.id || member.user?.id || member.id;
         const author = message.author.id === userId;
 
-        const prev = await client.api.prevget(userId);
+        let prev;
+        try {
+            prev = await client.api.prevget(userId);
+        } catch (error) {
+            console.error('[PREVNAME] Erreur API:', error.message);
+            return message.channel.send("❌ Impossible de récupérer les prevnames. L'API est temporairement indisponible.");
+        }
+        
         if (prev.prevnames.length === 0) {
             return message.channel.send({
                 content: author ? "Vous n'avez pas de prevname." : `${member.username || member.user.username} n'a pas de prevname.`

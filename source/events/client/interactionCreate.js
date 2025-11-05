@@ -22,7 +22,7 @@ module.exports = {
             } catch (error) {
                 console.error(`[INTERACTION ERROR] Commande: ${interaction.commandName}`, error);
                 // Tenter de répondre à l'utilisateur en cas d'erreur
-                const errorMessage = { content: "Une erreur est survenue lors de l'exécution de cette commande.", ephemeral: true };
+                const errorMessage = { content: "Une erreur est survenue lors de l'exécution de cette commande.", flags: Discord.MessageFlags.Ephemeral };
                 if (interaction.deferred || interaction.replied) {
                     await interaction.editReply(errorMessage).catch(() => {});
                 } else {
@@ -40,7 +40,7 @@ module.exports = {
                 if (!menu) {
                     return interaction.reply({ 
                         content: await client.lang('rolemenu.interaction.notfound'), 
-                        ephemeral: true 
+                        flags: Discord.MessageFlags.Ephemeral 
                     });
                 }
 
@@ -75,20 +75,20 @@ module.exports = {
                 if (changes.length === 0) {
                     return interaction.reply({ 
                         content: await client.lang('rolemenu.interaction.nochanges'), 
-                        ephemeral: true 
+                        flags: Discord.MessageFlags.Ephemeral 
                     });
                 }
 
                 return interaction.reply({ 
                     content: await client.lang('rolemenu.interaction.success') + '\n' + changes.join('\n'), 
-                    ephemeral: true 
+                    flags: Discord.MessageFlags.Ephemeral 
                 });
 
             } catch (error) {
                 console.error('[ROLEMENU] Error handling interaction:', error);
                 return interaction.reply({ 
                     content: await client.lang('erreur'), 
-                    ephemeral: true 
+                    flags: Discord.MessageFlags.Ephemeral 
                 }).catch(() => {});
             }
         }

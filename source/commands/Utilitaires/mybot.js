@@ -16,7 +16,14 @@ module.exports = {
      * @returns 
      */
     run: async (client, message, args) => {
-        const response = (await client.api.botget(message.author.id)).bots || []
+        let response;
+        try {
+            response = (await client.api.botget(message.author.id)).bots || [];
+        } catch (error) {
+            console.error('[MYBOT] Erreur API:', error.message);
+            return message.reply({ content: "❌ Impossible de récupérer vos bots. L'API est temporairement indisponible." });
+        }
+        
         if (response.length === 0) {
             return message.reply({ content: await client.lang('mybot.aucun') });
         }

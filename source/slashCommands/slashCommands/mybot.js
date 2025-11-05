@@ -16,9 +16,17 @@ module.exports = {
      * @param {string[]} args 
      */
     run: async (client, interaction) => {
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferReply({ flags: Discord.MessageFlags.Ephemeral });
         const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.color
-        const response = (await client.api.botget(interaction.user.id)).bots || []
+        
+        let response;
+        try {
+            response = (await client.api.botget(interaction.user.id)).bots || [];
+        } catch (error) {
+            console.error('[MYBOT] Erreur API:', error.message);
+            return interaction.editReply({ content: "❌ Impossible de récupérer vos bots. L'API est temporairement indisponible." });
+        }
+        
         if (response.length === 0) {
             return interaction.editReply({ content: await client.lang('mybot.aucun') });
         }
@@ -38,6 +46,6 @@ module.exports = {
         }
 
         embed.setDescription(description);
-        interaction.editReply({ embeds: [embed] });
+        return interaction.editReply({ embeds: [embed] });
     },
 };

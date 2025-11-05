@@ -17,7 +17,7 @@ module.exports = {
    */
   run: async (client, interaction) => {
     const start = Date.now()
-    await interaction.deferReply({ ephemeral: true });
+    await interaction.deferReply({ flags: Discord.MessageFlags.Ephemeral });
     interaction.editReply({ content: "ping..." });
     const fin = Date.now()
     const time = fin - start
