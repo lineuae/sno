@@ -37,21 +37,35 @@ module.exports = {
 
         let prev;
         try {
+            console.log('[PREVNAME SLASH] Appel API pour userId:', userId);
             prev = await client.api.prevget(userId);
+            console.log('[PREVNAME SLASH] Réponse API:', prev);
         } catch (error) {
-            console.error('[PREVNAME] Erreur API:', error.message);
-            return interaction.editReply({ 
-                content: "❌ Impossible de récupérer les prevnames. L'API est temporairement indisponible." 
-            });
+            console.error('[PREVNAME SLASH] Erreur API complète:', error);
+            
+            // Fallback: essayer de récupérer depuis la base de données locale
+            const localPrevnames = await client.db.get(`prevnames_${userId}`);
+            if (localPrevnames && localPrevnames.length > 0) {
+                prev = { prevnames: localPrevnames };
+                console.log('[PREVNAME SLASH] Utilisation des données locales');
+            } else {
+                return interaction.editReply({ 
+                    content: "❌ Impossible de récupérer les prevnames.\n**Détails:** " + error.message +
+                    "\n\n**Configuration API:**\n`Panel:` http://167.114.48.55:30126/api\n`Endpoint:` /prevname/get"
+                });
+            }
         }
         
         if (!prev || !prev.prevnames || prev.prevnames.length === 0) {
+            console.log('[PREVNAME SLASH] Aucun prevname trouvé');
             return interaction.editReply({
                 content: author 
                     ? "Vous n'avez pas de prevname." 
                     : `${targetUser.username} n'a pas de prevname.`
             });
         }
+        
+        console.log('[PREVNAME SLASH] Création de l\'embed avec', prev.prevnames.length, 'prevnames');
 
         const embed = new Discord.EmbedBuilder()
             .setColor(color)

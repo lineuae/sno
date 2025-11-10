@@ -25,11 +25,21 @@ async function prevget(userId) {
         }, {
             headers: {
                 'api-key': config_api.snoway.api
-            }
+            },
+            timeout: 5000 // Timeout de 5 secondes
         });
+        console.log('[API] Réponse prevget:', response.data);
         return response.data;
     } catch (e) {
-        console.error('Erreur prevget:', e.message);
+        console.error('[API] Erreur prevget:', e.message);
+        if (e.code === 'ECONNABORTED') {
+            console.error('[API] Timeout - L\'API ne répond pas');
+        } else if (e.response) {
+            console.error('[API] Status:', e.response.status);
+            console.error('[API] Data:', e.response.data);
+        } else if (e.request) {
+            console.error('[API] Aucune réponse reçue de l\'API');
+        }
         throw e;
     }
 }
