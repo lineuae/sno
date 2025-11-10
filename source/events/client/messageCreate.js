@@ -47,18 +47,26 @@ module.exports = {
     if (!permBot) {
       const permissionIndex = await client.db.get(`perms_${message.guild.id}`);
       if (permissionIndex) {
+        let hasPermission = false;
         for (const perm in permissionIndex) {
-          if (perm === 'public' && permissionIndex[perm]?.commands.includes(name) || (message.member.roles.cache.some(r => permissionIndex[perm].role?.includes(r.id)) && permissionIndex[perm]?.commands.includes(name))) {
-            return cmd.run(client, message, args);
+          if (perm === 'public' && permissionIndex[perm]?.commands.includes(name)) {
+            hasPermission = true;
+            break;
+          }
+          if (message.member.roles.cache.some(r => permissionIndex[perm].role?.includes(r.id)) && permissionIndex[perm]?.commands.includes(name)) {
+            hasPermission = true;
+            break;
           }
         }
-      }
-
-      if (client.noperm.trim() !== '') {
-        return message.channel.send(client.noperm);
+        
+        if (!hasPermission) {
+          if (client.noperm.trim() !== '') {
+            return message.channel.send(client.noperm);
+          }
+          return;
+        }
       }
     }
-
 
     return cmd.run(client, message, args);
   }

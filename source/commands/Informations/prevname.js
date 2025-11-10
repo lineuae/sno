@@ -46,7 +46,7 @@ module.exports = {
             return message.channel.send("❌ Impossible de récupérer les prevnames. L'API est temporairement indisponible.");
         }
         
-        if (prev.prevnames.length === 0) {
+        if (!prev || !prev.prevnames || prev.prevnames.length === 0) {
             return message.channel.send({
                 content: author ? "Vous n'avez pas de prevname." : `${member.username || member.user.username} n'a pas de prevname.`
             });
