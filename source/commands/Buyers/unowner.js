@@ -22,13 +22,24 @@ module.exports = {
     run: async (client, message, args) => {
         if (!client.config.buyers.includes(message.author.id)) return;
         const mention = message.mentions.members.first();
-        const member = mention ? mention.user : null || await client.users.fetch(args[0]);
-        const ownerId = member.id;
-        const owners = await client.db.get('owner') || [];
 
         if (!mention && !args[0]) {
             return message.channel.send(await client.lang('unowner.nouser'));
         }
+
+        let member;
+        if (mention) {
+            member = mention.user;
+        } else {
+            member = await client.users.fetch(args[0]).catch(() => null);
+        }
+
+        if (!member) {
+            return message.channel.send(await client.lang('unowner.nouser'));
+        }
+
+        const ownerId = member.id;
+        const owners = await client.db.get('owner') || [];
 
         if (!owners.includes(ownerId)) {
             return message.channel.send(await client.lang('unowner.nowoner'));

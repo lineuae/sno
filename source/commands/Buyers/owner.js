@@ -74,7 +74,7 @@ module.exports = {
                 return message.channel.send(`\`${member.username}\` ` + await client.lang('owner.deleteowner'));
             }).catch(async error => {
                 console.error('Erreur:', error);
-                message.channel.send(await client.lang('owner.erreur'));
+                message.channel.send(await client.lang('erreur'));
             });
 
         } else {
@@ -87,7 +87,7 @@ module.exports = {
                 return message.channel.send(`\`${member.username}\` ` + await client.lang('owner.set'));
             }).catch(async error => {
                 console.error('Erreur:', error);
-                message.channel.send(await client.lang('owner.erreur'));
+                message.channel.send(await client.lang('erreur'));
             });
         }
 

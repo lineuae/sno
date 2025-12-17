@@ -55,34 +55,37 @@ module.exports = class Snoway extends Client {
         const guildConfig = await this.db.get(`langue`);
         const langCode = guildConfig || "fr";
         const langFilePath = `../../../langue/${langCode}.json`;
-        const keys = key.split(".");
-        let text;
 
-        let errorMessage;
+        let baseErrorMessage;
         switch (langCode) {
           case "en":
-            errorMessage = "No translation for this text";
+            baseErrorMessage = "No translation for this text. Please contact the developers!";
             break;
           default:
-            errorMessage = "Aucune traduction pour ce texte";
+            baseErrorMessage = "Aucune traduction pour ce texte. Merci de contacter les développeurs !";
         }
 
+        let langContent;
         try {
-          text = require(langFilePath);
+          langContent = require(langFilePath);
         } catch (error) {
 
           console.error(
             `Impossible de charger le fichier de langue pour la langue "${langCode}" : ${error.message}`
           );
 
-          return resolve(errorMessage);
+          return resolve(baseErrorMessage);
         }
 
-        for (const key of keys) {
-          text = text[key];
-          if (!text) {
+        const keys = key.split(".");
+        let text = langContent;
+        const errorMessage = langContent?.notard || baseErrorMessage;
+
+        for (const subKey of keys) {
+          text = text[subKey];
+          if (text === undefined || text === null) {
             console.error(
-              `Impossible de trouver une traduction pour "${key}", langue : ${langCode}`
+              `Impossible de trouver une traduction pour "${subKey}", langue : ${langCode}`
             );
             return resolve(errorMessage);
           }
@@ -91,7 +94,6 @@ module.exports = class Snoway extends Client {
         return resolve(text);
       });
     }
-  }
   async connect() {
     try {
       // Connexion à MongoDB
