@@ -45,15 +45,15 @@ module.exports = {
             return message.channel.send(await client.lang('unowner.nowoner'));
         }
 
-        await client.api.ownerdel(client.user.id, ownerId).then(async (response) => {
+        try {
             const ownerIndex = owners.indexOf(ownerId);
             owners.splice(ownerIndex, 1);
             await client.db.set('owner', owners);
 
             return message.channel.send(`\`${member.username}\` ${await client.lang('unowner.remove')}`);
-        }).catch(async (error) => {
-            console.error('Erreur:', error);
-            message.channel.send(await client.lang('erreur'));
-        });
+        } catch (error) {
+            console.error('Erreur unowner:', error);
+            return message.channel.send(await client.lang('erreur'));
+        }
     }
 };

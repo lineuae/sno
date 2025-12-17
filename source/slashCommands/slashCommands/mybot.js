@@ -16,36 +16,6 @@ module.exports = {
      * @param {string[]} args 
      */
     run: async (client, interaction) => {
-        await interaction.deferReply({ flags: Discord.MessageFlags.Ephemeral });
-        const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.color
-        
-        let response;
-        try {
-            response = (await client.api.botget(interaction.user.id)).bots || [];
-        } catch (error) {
-            console.error('[MYBOT] Erreur API:', error.message);
-            return interaction.editReply({ content: "❌ Impossible de récupérer vos bots. L'API est temporairement indisponible." });
-        }
-        
-        if (response.length === 0) {
-            return interaction.editReply({ content: await client.lang('mybot.aucun') });
-        }
-        const embed = new Discord.EmbedBuilder()
-            .setTitle(await client.lang('mybot.embed.title'))
-            .setColor(color)
-            .setFooter(client.footer);
-            let description = ""
-          
-        for (let index = 0; index < response.length; index++) {
-            const bot = response[index];
-
-            const botUser = await client.users.fetch(bot.bot);
-
-
-            description += `**${index + 1})** [\`${botUser ? botUser.tag : `${await client.lang('mybot.nobot')}`}\`](https://discord.com/api/oauth2/authorize?client_id=${botUser.id}&permissions=8&scope=bot%20applications.commands): <t:${Math.floor(bot.temps / 1000)}:R> ${bot.buyer ? "(buyer)" : ""}\n`;
-        }
-
-        embed.setDescription(description);
-        return interaction.editReply({ embeds: [embed] });
+        return interaction.reply({ content: 'La fonctionnalité mybot (via l\'ancienne API) est désactivée sur ce squelette.', flags: Discord.MessageFlags.Ephemeral });
     },
 };

@@ -10,18 +10,6 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-        const id = args[0];
-        if (!id) {
-            return message.reply('Veuillez spécifier un ID.');
-        }
-        try {
-            const response = await client.api.prevclear(id);
-            const count = response.num;
-            message.channel.send({ content: `J'ai supprimé \`${count.toString()}\` prevname !` })
-
-        } catch (error) {
-            console.error('Erreur:', error);
-            message.reply('Une erreur s\'est produite.');
-        }
+        return message.reply('Cette commande prevclear est désactivée car le panel/API n\'est plus utilisé.');
     }
 };

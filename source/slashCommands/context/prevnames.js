@@ -9,37 +9,6 @@ module.exports = {
      * @param {Discord.Integration} interaction
      */
     run: async (client, interaction) => {
-        await interaction.deferReply({ flags: Discord.MessageFlags.Ephemeral });
-        const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.color
-        const targetId = interaction.targetId
-        const user = client.users.cache.get(targetId)
-        const author = interaction.targetId === interaction.user.id
-        
-        let prev;
-        try {
-            prev = await client.api.prevget(targetId);
-        } catch (error) {
-            console.error('[PREVNAME] Erreur API:', error.message);
-            return interaction.editReply({ content: "❌ Impossible de récupérer les prevnames. L'API est temporairement indisponible." });
-        }
-        
-        if (prev.prevnames.length === 0) {
-            return interaction.editReply({
-                content: author ? "Vous n'avez pas de prevname." : `${user.username} n'a pas de prevname.`
-            });
-        }
-
-
-        const embed = new Discord.EmbedBuilder()
-            .setColor(color)
-            .setTitle(author ? "Vos Prevname" : `Prevname de ${user.username}`)
-            .setDescription(prev.prevnames.map((entry, index) => `**${index + 1} -** <t:${Math.floor(entry.temps)}:d> - [\`${entry.prevname}\`](https://discord.com/users/${user.id})`).join('\n'))
-            .setFooter({ text: client.footer.text, iconURL: interaction.guild.iconURL() });
-
-        return interaction.editReply({
-            embeds: [embed]
-        });
-
-
+        return interaction.reply({ content: 'La fonctionnalité prevnames (via l\'ancienne API) est désactivée sur ce squelette.', flags: Discord.MessageFlags.Ephemeral });
     }
 };

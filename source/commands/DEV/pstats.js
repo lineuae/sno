@@ -10,16 +10,7 @@ module.exports = {
      * @param {Array} args 
      */
     run: async (client, message, args) => {
-
-        try {
-            const response = await client.api.prevcount();
-            const count = numm(response.count);
-            message.channel.send({ content: `\`${count}\` prevnames dans la snoway API !` })
-
-        } catch (error) {
-            console.error('Erreur:', error);
-            message.reply('Une erreur s\'est produite.');
-        }
+        return message.reply('Les statistiques de l\'ancienne API sont désactivées sur ce squelette.');
     }
 };
 

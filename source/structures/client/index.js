@@ -43,7 +43,6 @@ module.exports = class Snoway extends Client {
     this.dev = ["403174893707067392", "888538191701893150"],
     this.version = version;
     this.db = new MongoDB();
-    this.api = this.functions.api
 
     this.CommandLoad();
     this.EventLoad();
@@ -94,6 +93,7 @@ module.exports = class Snoway extends Client {
         return resolve(text);
       });
     }
+  }
   async connect() {
     try {
       // Connexion à MongoDB

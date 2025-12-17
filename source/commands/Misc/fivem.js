@@ -13,28 +13,7 @@ module.exports = {
    * @param {string[]} args 
    */
   run: async (client, message, args) => {
-    if (args[0]) {
-      if (args[0].toLowerCase() === "set") {
-        const ips = args[1];
-        if (!ips) return message.reply('Veuillez spécifier une adresse IP et un port valides.');
-        const { ip, port } = check(ips);
-        if (ip && port) {
-          await client.db.set(`fivemip`, {
-            ip: ip,
-            port: port
-          });
-          return message.reply('Serveur FiveM set !');
-        } else {
-          return message.reply('Veuillez spécifier une adresse IP et un port valides.');
-        }
-      } else {
-        const embedMessage = await embed(client);
-        return message.reply({ embeds: [embedMessage] });
-      }
-    } else {
-      const embedMessage = await embed(client);
-      return message.reply({ embeds: [embedMessage] });
-    }
+    return message.reply('Le système FiveM est désactivé sur ce bot.').catch(() => {});
   }
 };
 
@@ -42,21 +21,6 @@ async function embed(client) {
   const embed = new EmbedBuilder()
     .setColor(client.config.color)
     .setFooter(client.footer);
-
-  try {
-    const servData = (await client.functions.fivem.getAllPlayer()).serv;
-    const serv = servData !== undefined ? servData : [];
-     embed.setTitle(`Joueur connecté ${((await client.functions.fivem.getAllPlayer()).serv).length}/${(await client.functions.fivem.getPlayerMax()).max}`);
-    let text = "";
-    serv.forEach(player => {
-      text += `**ID:** \`${player.id}\` | **Player:** \`${player.name}\` | **Ping:** \`${player.ping}ms\`\n`;
-    });
-
-    embed.setDescription(text);
-  } catch (error) {
-    console.log(error)
-    embed.setDescription("Impossible à récupérer: adresse IP invalide ou serveur hors ligne.");
-  }
 
   return embed;
 }

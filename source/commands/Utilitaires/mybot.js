@@ -16,33 +16,6 @@ module.exports = {
      * @returns 
      */
     run: async (client, message, args) => {
-        let response;
-        try {
-            response = (await client.api.botget(message.author.id)).bots || [];
-        } catch (error) {
-            console.error('[MYBOT] Erreur API:', error.message);
-            return message.reply({ content: "❌ Impossible de récupérer vos bots. L'API est temporairement indisponible." });
-        }
-        
-        if (response.length === 0) {
-            return message.reply({ content: await client.lang('mybot.aucun') });
-        }
-        const embed = new Discord.EmbedBuilder()
-            .setTitle(await client.lang('mybot.embed.title'))
-            .setColor(client.config.color)
-            .setFooter(client.footer);
-            let description = ""
-          
-        for (let index = 0; index < response.length; index++) {
-            const bot = response[index];
-
-            const botUser = await client.users.fetch(bot.bot);
-
-
-            description += `**${index + 1})** [\`${botUser ? botUser.tag : `${await client.lang('mybot.nobot')}`}\`](https://discord.com/api/oauth2/authorize?client_id=${botUser.id}&permissions=8&scope=bot%20applications.commands): <t:${Math.floor(bot.temps / 1000)}:R> ${bot.buyer ? "(buyer)" : ""}\n`;
-        }
-
-        embed.setDescription(description);
-        message.channel.send({ embeds: [embed] });
+        return message.reply({ content: 'La fonctionnalité mybot (liste de bots via panel) est désactivée sur ce squelette.' });
     },
 };
