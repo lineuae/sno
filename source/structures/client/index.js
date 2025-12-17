@@ -39,7 +39,7 @@ module.exports = class Snoway extends Client {
     this.config = require('../../../config/config');
 
     this.support = 'https://discord.gg/line'
-    this.footer = {text: "emirati V3 by line and node"}
+    this.footer = {text: "Noria V4 by line and node"}
     this.dev = ["403174893707067392", "888538191701893150"],
     this.version = version;
     this.db = new MongoDB();

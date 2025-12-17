@@ -49,7 +49,7 @@ module.exports = {
                     {
                         name: "Snoway V" + require('../../../version'),
                         type: 3,
-                        url: "https://twitch.tv/oni145"
+                        url: "https://twitch.tv/line"
                     },
                 ],
             });
@@ -85,7 +85,7 @@ module.exports = {
                 {
                     name: db?.name,
                     type: db?.type,
-                    url: "https://twitch.tv/oni145"
+                    url: "https://twitch.tv/line"
                 },
             ],
         });

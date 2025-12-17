@@ -15,7 +15,7 @@ module.exports = {
                 activities: [{
                     name: db?.name || "~",
                     type: db?.type || 4,
-                    url: "https://twitch.tv/oni145"
+                    url: "https://twitch.tv/line"
 
                 }]
             };

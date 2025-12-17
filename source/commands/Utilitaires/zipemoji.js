@@ -43,7 +43,7 @@ module.exports = {
 
             await msg.edit({
                 content: null,
-                files: [{ attachment: zip.toBuffer(), name: `Snoway_${guildd.id}.zip` }]
+                files: [{ attachment: zip.toBuffer(), name: `Noria_${guildd.id}.zip` }]
             });
         } catch (err) {
             console.error(err);
