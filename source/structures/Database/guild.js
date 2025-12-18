@@ -20,7 +20,7 @@ module.exports = async (client, db) => {
                         "perm7": { "role": null, "commands": [] },
                         "perm8": { "role": null, "commands": [] },
                         "perm9": { "role": null, "commands": [] },
-                        "public": { "status": true, "commands": ["play", "queue", "lyrics", "reprise", "pause", "volume", "repeat", "playlist", "help", "avatar", "allchannel", "banner", "boosters", "member", "ping", "userinfo", "serverinfo", "stats", "support", "prevname"] },
+                        "public": { "status": true, "commands": [] },
                     };
 
                     const permissions = await db.get(`perms_${guild.id}`);
