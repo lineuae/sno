@@ -19,22 +19,6 @@ module.exports = {
      * @returns 
      */
     run: async (client, message, args) => {
-        if (!args[0]) {
-            return message.reply("Veuillez spécifier le code du giveaway.");
-        }
-
-        const giveawayData = await client.db.get(`giveaway_${message.guild.id}_${args[0]}`);
-
-        if (!giveawayData) {
-            return message.reply("Aucun giveaway trouvé avec ce code.");
-        }
-
-        if (!giveawayData.end) {
-            return message.reply("Ce giveaway n'est pas encore terminé.");
-        }
-
-        giveawayData.endTime = Date.now() + 1000;
-        giveawayData.end = false;
-        await client.db.set(`giveaway_${message.guild.id}_${args[0]}`, giveawayData);
+        return message.reply({ content: 'Cette commande est désactivée.' })
     },
 };

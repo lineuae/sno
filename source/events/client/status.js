@@ -21,6 +21,6 @@ module.exports = {
             };
             client.user.setPresence(presenceOptions)
 
-        }, 5000)
+        }, 60000)
     }
 };
