@@ -4,7 +4,6 @@ const version = require('../../../version')
 const MongoDB = require('../Database/mongodb');
 const { REST } = require('@discordjs/rest');
 const { readdirSync } = require('fs');
-const { Player } = require('discord-player');
 const { DefaultWebSocketManagerOptions: { identifyProperties } } = require("@discordjs/ws");
 identifyProperties.browser = "Discord Android"
 
@@ -31,8 +30,6 @@ module.exports = class Snoway extends Client {
     this.SnipeMsg = new Map();
     this.SnipeMention = new Map();
     this.SnipeEdit = new Map();
-    this.player = Player.singleton(this);
-    this.player.extractors.loadDefault();
 
     this.functions = require('../Functions/index')
     this.utils = require('../Utils/index')
