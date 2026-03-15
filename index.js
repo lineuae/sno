@@ -16,22 +16,6 @@ process.on("uncaughtException", (e) => {
       keep_alive()
  }
 
- client.on('error', (e) => {
-      console.log(e)
- })
-
- client.on('shardDisconnect', (event, shardId) => {
-      console.log(`[SHARD ${shardId}] disconnect`, event?.code)
- })
-
- client.on('shardReconnecting', (shardId) => {
-      console.log(`[SHARD ${shardId}] reconnecting`)
- })
-
- client.on('shardError', (error, shardId) => {
-      console.log(`[SHARD ${shardId}] error`, error)
- })
-
  process.on("unhandledRejection", (reason) => {
       console.log(reason)
  })
