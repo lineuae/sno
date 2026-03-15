@@ -11,3 +11,13 @@ process.on("uncaughtException", (e) => {
      
        console.log(e)
    })
+
+ keep_alive
+
+ process.on("unhandledRejection", (reason) => {
+      console.log(reason)
+ })
+
+ process.on("warning", (w) => {
+      console.log(w)
+ })
