@@ -51,6 +51,9 @@ module.exports = {
                 'Buyers'
             ];
 
+            const existingFolders = new Set(cmddanslefichier);
+            const orderedExistingFolders = folderOrder.filter((f) => existingFolders.has(f));
+
             const categoryOrder = {
                 'Modérations': 1,
                 'Informations': 2,
@@ -75,13 +78,18 @@ module.exports = {
                 }
 
 
-                cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
+                orderedExistingFolders.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
 
                 const generetapage = (pageactuellement) => {
-                    const fichiertasoeur = cmddanslefichier[pageactuellement];
+                    const fichiertasoeur = orderedExistingFolders[pageactuellement];
                     const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
                     const categoryCommands = cmdFiles.map(file => {
-                        const command = require(`../${fichiertasoeur}/${file}`);
+                        let command;
+                        try {
+                            command = require(`../${fichiertasoeur}/${file}`);
+                        } catch (e) {
+                            return null;
+                        }
                         let usages = null;
                         let descriptions = null
                         if (command.usage) {
@@ -118,7 +126,7 @@ module.exports = {
                         }
 
                         return description;
-                    });
+                    }).filter(Boolean);
 
                     const embed = new Discord.EmbedBuilder()
                         .setColor(client.config.color)
@@ -131,7 +139,7 @@ module.exports = {
                                 .setCustomId('selectMenu')
                                 .setPlaceholder('Snoway')
                                 .addOptions(
-                                    folderOrder.map(folder => ({
+                                    orderedExistingFolders.map(folder => ({
                                         label: folder,
                                         value: folder,
                                         emoji: fileEmojis[folder] || "❌",
@@ -165,7 +173,7 @@ module.exports = {
                         })
                     }
                     const selectedFile = i.values[0];
-                    const page = cmddanslefichier.indexOf(selectedFile);
+                    const page = orderedExistingFolders.indexOf(selectedFile);
                     const { embeds, components } = generetapage(page);
                     await i.update({ embeds, components });
                 });
@@ -174,7 +182,7 @@ module.exports = {
             }
 
             if (module === 'normal') {
-                const totalpag = cmddanslefichier.length;
+                const totalpag = orderedExistingFolders.length;
                 let page = 0;
 
                 if (args.length > 0 && !isNaN(args[0])) {
@@ -184,13 +192,18 @@ module.exports = {
                 }
 
 
-                cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
+                orderedExistingFolders.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
 
                 const generetapage = (pageactuellement) => {
-                    const fichiertasoeur = cmddanslefichier[pageactuellement];
+                    const fichiertasoeur = orderedExistingFolders[pageactuellement];
                     const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
                     const categoryCommands = cmdFiles.map(file => {
-                        const command = require(`../${fichiertasoeur}/${file}`);
+                        let command;
+                        try {
+                            command = require(`../${fichiertasoeur}/${file}`);
+                        } catch (e) {
+                            return null;
+                        }
                         let usages = null;
                         let descriptions = null
                         if (command.usage) {
@@ -227,7 +240,7 @@ module.exports = {
                         }
 
                         return description;
-                    });
+                    }).filter(Boolean);
 
                     const embed = new Discord.EmbedBuilder()
                         .setColor(client.config.color)
@@ -240,7 +253,7 @@ module.exports = {
                                 .setCustomId('selectMenu')
                                 .setPlaceholder('Snoway')
                                 .addOptions(
-                                    folderOrder.map(folder => ({
+                                    orderedExistingFolders.map(folder => ({
                                         label: folder,
                                         value: folder,
                                         emoji: fileEmojis[folder] || "❌",
@@ -274,7 +287,7 @@ module.exports = {
                         })
                     }
                     const selectedFile = i.values[0];
-                    const page = cmddanslefichier.indexOf(selectedFile);
+                    const page = orderedExistingFolders.indexOf(selectedFile);
                     const { embeds, components } = generetapage(page);
                     await i.update({ embeds, components });
                 });
@@ -282,126 +295,23 @@ module.exports = {
             }
 
             if (module === 'button') {
-                const totalpag = cmddanslefichier.length;
-                let page = 0;
-            
-                if (args.length > 0 && !isNaN(args[0])) {
-                    page = parseInt(args[0]) - 1;
-                    if (page < 0) page = 0;
-                    if (page >= totalpag) page = totalpag - 1;
-                }
-            
-                cmddanslefichier.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
-            
-                const generetapage = (pageIndex) => {
-                    const fichiertasoeur = cmddanslefichier[pageIndex];
-                    const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
-                    const categoryCommands = cmdFiles.map(file => {
-                        const command = require(`../${fichiertasoeur}/${file}`);
-                        let usages = null;
-                        let descriptions = null;
-                        if (command.usage) {
-                            switch (lang) {
-                                case "fr":
-                                    usages = command.usage.fr;
-                                    break;
-                                case "en":
-                                    usages = command.usage.en;
-                                    break;
-                                default:
-                                    usages = command.usage.fr;
-                            }
-                        }
-            
-                        switch (lang) {
-                            case "fr":
-                                descriptions = command.description.fr;
-                                break;
-                            case "en":
-                                descriptions = command.description?.en;
-                                break;
-                            default:
-                                descriptions = command.description.fr;
-                        }
-            
-                        const usage = usages || {
-                            [command.name]: descriptions || "Error"
-                        };
-            
-                        let description = '';
-                        for (const [key, value] of Object.entries(usage)) {
-                            description += `\n\`${client.prefix}${key}\`\n${value}`;
-                        }
-            
-                        return description;
-                    });
-            
-                    const embed = new Discord.EmbedBuilder()
-                        .setColor(client.config.color)
-                        .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
-                        .setFooter(client.footer)
-                        .setDescription(`${aide}\n` + categoryCommands.join(''));
-            
-                    const rows = new Discord.ActionRowBuilder()
-                        .addComponents(
-                            new Discord.ButtonBuilder()
-                                .setCustomId('presedant')
-                                .setDisabled(pageIndex === 0)
-                                .setStyle(2)
-                                .setLabel(`<<<`),
-                            new Discord.ButtonBuilder()
-                                .setCustomId('page')
-                                .setDisabled(true)
-                                .setStyle(2)
-                                .setLabel(`${categoryOrder[fichiertasoeur]}/${Object.keys(categoryOrder).length}`),
-                            new Discord.ButtonBuilder()
-                                .setCustomId('suivant')
-                                .setStyle(2)
-                                .setDisabled(pageIndex === totalpag - 1)
-                                .setLabel(`>>>`),
-                        );
-            
-                    return { embeds: [embed], components: [rows] };
-                };
-            
-                const { embeds, components } = generetapage(page);
-                const helpMessage = await message.channel.send({ embeds, components });
-            
-                const collector = helpMessage.createMessageComponentCollector();
-            
-                collector.on('collect', async i => {
-                    if (i.user.id !== message.author.id) {
-                        return i.reply({
-                            content: await client.lang('interaction'),
-                            flags: 64
-                        });
-                    }
-            
-                    let newPage = page;
-                    if (i.customId === 'suivant') {
-                        newPage++;
-                    } else if (i.customId === 'presedant' && page > 0) {
-                        newPage--;
-                    }
-                    console.log(cmddanslefichier.indexOf(newPage))
-                    const pageIndex = cmddanslefichier.indexOf(newPage);
-            
-                    const { embeds, components } = generetapage(pageIndex);
-                    await i.update({ embeds, components });
-                    await i.deferUpdate(); 
-                });
+                return;
             }
-            
 
             if (module === "onepage") {
                 const formattedCategories = [];
 
-                for (const folder of cmddanslefichier) {
+                for (const folder of orderedExistingFolders) {
                     const cmdfichier = fs.readdirSync(`./source/commands/${folder}`).filter(file => file.endsWith('.js'));
                     const catecmd = [];
 
                     for (const file of cmdfichier) {
-                        const command = require(`../${folder}/${file}`);
+                        let command;
+                        try {
+                            command = require(`../${folder}/${file}`);
+                        } catch (e) {
+                            continue;
+                        }
                         catecmd.push(`${command.name}`);
                     }
 
@@ -419,6 +329,7 @@ module.exports = {
                 message.channel.send({ embeds: [embed] });
             }
         }
+
         if (args.length !== 0) {
             const cmdname = args[0]
             const command = client.commands.get(cmdname) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(cmdname));

@@ -162,12 +162,23 @@ module.exports = class Snoway extends Client {
     const subFolders = fs.readdirSync("./source/commands");
     let finale = new Collection();
     for (const category of subFolders) {
-      const commandsFiles = fs
-        .readdirSync(`./source/commands/${category}`)
-        .filter((file) => file.endsWith(".js"));
+      let commandsFiles;
+      try {
+        commandsFiles = fs
+          .readdirSync(`./source/commands/${category}`)
+          .filter((file) => file.endsWith(".js"));
+      } catch (e) {
+        continue;
+      }
 
       for (const commandFile of commandsFiles) {
-        const command = require(`../../commands/${category}/${commandFile}`);
+        let command;
+        try {
+          command = require(`../../commands/${category}/${commandFile}`);
+        } catch (e) {
+          console.log(e)
+          continue;
+        }
         command.category = category;
         command.commandFile = commandFile;
 
