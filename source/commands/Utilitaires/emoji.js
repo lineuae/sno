@@ -2,6 +2,7 @@ const ERROR_REASONS = {
     30008: { fr: "slots d'emojis pleins", en: 'emoji slots full' },
     50013: { fr: 'permissions manquantes', en: 'missing permissions' },
     50035: { fr: 'emoji introuvable ou invalide', en: 'emoji not found or invalid' },
+    50046: { fr: 'emoji introuvable ou invalide', en: 'emoji not found or invalid' },
 };
 
 module.exports = {
@@ -33,12 +34,13 @@ module.exports = {
         }
 
         const results = await Promise.allSettled(
-            emojis.map(emoji =>
-                message.guild.emojis.create({
-                    attachment: `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? 'gif' : 'png'}`,
-                    name: emoji.name,
-                })
-            )
+            emojis.map(async emoji => {
+                const url = `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? 'gif' : 'png'}`;
+                const res = await fetch(url);
+                if (!res.ok) throw Object.assign(new Error('not_found'), { code: 'NOT_FOUND' });
+                const buffer = Buffer.from(await res.arrayBuffer());
+                return message.guild.emojis.create({ attachment: buffer, name: emoji.name });
+            })
         );
 
         const added = [];
@@ -50,7 +52,9 @@ module.exports = {
                 added.push(name);
             } else {
                 const code = results[i].reason?.code;
-                const reason = ERROR_REASONS[code]?.[lang] ?? `code ${code} — ${results[i].reason?.message?.split('\n')[0] ?? '?'}`;
+                const reason = code === 'NOT_FOUND'
+                    ? (fr ? 'emoji introuvable' : 'emoji not found')
+                    : ERROR_REASONS[code]?.[lang] ?? (fr ? 'erreur inconnue' : 'unknown error');
                 failed.push(`**${name}** — ${reason}`);
             }
         }
