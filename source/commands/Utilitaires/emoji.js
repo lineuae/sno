@@ -1,6 +1,7 @@
 const ERROR_REASONS = {
     30008: { fr: "slots d'emojis pleins", en: 'emoji slots full' },
     50013: { fr: 'permissions manquantes', en: 'missing permissions' },
+    50035: { fr: 'emoji introuvable ou invalide', en: 'emoji not found or invalid' },
 };
 
 module.exports = {
@@ -49,8 +50,8 @@ module.exports = {
                 added.push(name);
             } else {
                 const code = results[i].reason?.code;
-                const reason = ERROR_REASONS[code]?.[lang] ?? results[i].reason?.message;
-                failed.push(`\`${name}\`: ${reason}`);
+                const reason = ERROR_REASONS[code]?.[lang] ?? (fr ? 'erreur inconnue' : 'unknown error');
+                failed.push(`**${name}** — ${reason}`);
             }
         }
 
@@ -60,8 +61,8 @@ module.exports = {
             const n = added.length;
             lines.push(
                 fr
-                    ? `${n} emoji${pl(n)} ajouté${pl(n)} : ${added.map(x => `\`${x}\``).join(', ')}`
-                    : `${n} emoji${pl(n)} added: ${added.map(x => `\`${x}\``).join(', ')}`
+                    ? `**${n} emoji${pl(n)} ajouté${pl(n)}** : ${added.map(x => `\`${x}\``).join(', ')}`
+                    : `**${n} emoji${pl(n)} added**: ${added.map(x => `\`${x}\``).join(', ')}`
             );
         }
 
@@ -69,8 +70,8 @@ module.exports = {
             const n = failed.length;
             lines.push(
                 fr
-                    ? `Échec sur ${n} emoji${pl(n)} :\n${failed.join('\n')}`
-                    : `Failed on ${n} emoji${pl(n)}:\n${failed.join('\n')}`
+                    ? `**Échec sur ${n} emoji${pl(n)}** :\n${failed.join('\n')}`
+                    : `**Failed on ${n} emoji${pl(n)}**:\n${failed.join('\n')}`
             );
         }
 
