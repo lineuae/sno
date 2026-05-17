@@ -1,3 +1,18 @@
+const https = require('node:https');
+
+const fetchBuffer = (url) => new Promise((resolve, reject) => {
+    https.get(url, res => {
+        if (res.statusCode !== 200) {
+            res.resume();
+            return reject(Object.assign(new Error(), { code: `HTTP_${res.statusCode}` }));
+        }
+        const chunks = [];
+        res.on('data', c => chunks.push(c));
+        res.on('end', () => resolve(Buffer.concat(chunks)));
+        res.on('error', reject);
+    }).on('error', reject);
+});
+
 const ERROR_REASONS = {
     30008: { fr: "slots d'emojis pleins", en: 'emoji slots full' },
     50013: { fr: 'permissions manquantes', en: 'missing permissions' },
@@ -37,9 +52,7 @@ module.exports = {
             emojis.map(async emoji => {
                 const ext = emoji.animated ? 'gif' : 'webp';
                 const url = `https://cdn.discordapp.com/emojis/${emoji.id}.${ext}`;
-                const res = await fetch(url, { headers: { Accept: 'image/gif, image/webp, image/png, image/*;q=0.8' } });
-                if (!res.ok) throw Object.assign(new Error(), { code: `HTTP_${res.status}` });
-                const buffer = Buffer.from(await res.arrayBuffer());
+                const buffer = await fetchBuffer(url);
                 return message.guild.emojis.create({ attachment: buffer, name: emoji.name });
             })
         );
