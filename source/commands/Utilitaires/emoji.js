@@ -50,7 +50,7 @@ module.exports = {
                 added.push(name);
             } else {
                 const code = results[i].reason?.code;
-                const reason = ERROR_REASONS[code]?.[lang] ?? (fr ? 'erreur inconnue' : 'unknown error');
+                const reason = ERROR_REASONS[code]?.[lang] ?? `code ${code} — ${results[i].reason?.message?.split('\n')[0] ?? '?'}`;
                 failed.push(`**${name}** — ${reason}`);
             }
         }
