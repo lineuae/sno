@@ -35,9 +35,10 @@ module.exports = {
 
         const results = await Promise.allSettled(
             emojis.map(async emoji => {
-                const url = `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? 'gif' : 'png'}`;
+                const ext = emoji.animated ? 'gif' : 'webp';
+                const url = `https://cdn.discordapp.com/emojis/${emoji.id}.${ext}`;
                 const res = await fetch(url);
-                if (!res.ok) throw Object.assign(new Error('not_found'), { code: 'NOT_FOUND' });
+                if (!res.ok) throw Object.assign(new Error(), { code: `HTTP_${res.status}` });
                 const buffer = Buffer.from(await res.arrayBuffer());
                 return message.guild.emojis.create({ attachment: buffer, name: emoji.name });
             })
@@ -52,9 +53,7 @@ module.exports = {
                 added.push(name);
             } else {
                 const code = results[i].reason?.code;
-                const reason = code === 'NOT_FOUND'
-                    ? (fr ? 'emoji introuvable' : 'emoji not found')
-                    : ERROR_REASONS[code]?.[lang] ?? (fr ? 'erreur inconnue' : 'unknown error');
+                const reason = ERROR_REASONS[code]?.[lang] ?? `${fr ? 'erreur' : 'error'}: ${code}`;
                 failed.push(`**${name}** — ${reason}`);
             }
         }
