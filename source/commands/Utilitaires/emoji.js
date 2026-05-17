@@ -28,49 +28,29 @@ module.exports = {
         let errors = [];
 
         for (const rawEmoji of args) {
-            const emojiss = rawEmoji.match(emojiRegex);
+            const match = rawEmoji.match(emojiRegex);
+            if (!match) continue;
 
-            if (emojiss) {
-                const emojiName = emojiss[1];
-                const emojiId = emojiss[2];
-                const isAnimated = rawEmoji.startsWith("<a:");
-                const extension = isAnimated ? "gif" : "png";
-                const url = `https://cdn.discordapp.com/emojis/${emojiId}.${extension}?size=4096`;
+            const name = match[1];
+            const id = match[2];
+            const animated = rawEmoji.startsWith("<a:");
+            const url = `https://cdn.discordapp.com/emojis/${id}.${animated ? 'gif' : 'png'}`;
 
-                try {
-                    const response = await fetch(url, {
-                        headers: {
-                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
-                        }
-                    });
-
-                    if (!response.ok) {
-                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                    }
-
-                    const buffer = Buffer.from(await response.arrayBuffer());
-
-                    await message.guild.emojis.create({
-                        attachment: buffer,
-                        name: emojiName,
-                        animated: isAnimated
-                    });
-
-                    creeemojis++;
-                } catch (error) {
-                    console.error(`Erreur création emoji "${emojiName}" (ID: ${emojiId}):`, error);
-                    errors.push(`${emojiName}: ${error.message}`);
-                }
+            try {
+                await message.guild.emojis.create({ attachment: url, name });
+                creeemojis++;
+            } catch (error) {
+                console.error(`Emoji error ${name}:`, error.message);
+                errors.push(`${name}: ${error.message}`);
             }
         }
 
         if (creeemojis > 0) {
-            const successMsg = await client.lang('emoji.create');
-            message.channel.send(`${creeemojis} émoji${creeemojis !== 1 ? "s" : ""} ${successMsg}${creeemojis !== 1 ? "s" : ""}`);
+            message.channel.send(`${creeemojis} émoji${creeemojis !== 1 ? 's' : ''} ${await client.lang('emoji.create')}${creeemojis !== 1 ? 's' : ''}`);
         }
 
         if (errors.length > 0) {
-            message.channel.send({ content: `${await client.lang('erreur')}\n\`\`\`${errors.join('\n')}\`\`\`` });
+            message.channel.send(`${await client.lang('erreur')}\n\`\`\`${errors.join('\n')}\`\`\``);
         }
     },
 };
