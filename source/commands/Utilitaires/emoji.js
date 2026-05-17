@@ -37,7 +37,7 @@ module.exports = {
             emojis.map(async emoji => {
                 const ext = emoji.animated ? 'gif' : 'webp';
                 const url = `https://cdn.discordapp.com/emojis/${emoji.id}.${ext}`;
-                const res = await fetch(url);
+                const res = await fetch(url, { headers: { Accept: 'image/gif, image/webp, image/png, image/*;q=0.8' } });
                 if (!res.ok) throw Object.assign(new Error(), { code: `HTTP_${res.status}` });
                 const buffer = Buffer.from(await res.arrayBuffer());
                 return message.guild.emojis.create({ attachment: buffer, name: emoji.name });
