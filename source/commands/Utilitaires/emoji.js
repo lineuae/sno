@@ -50,8 +50,7 @@ module.exports = {
 
         const results = await Promise.allSettled(
             emojis.map(async emoji => {
-                const ext = emoji.animated ? 'gif' : 'webp';
-                const url = `https://cdn.discordapp.com/emojis/${emoji.id}.${ext}`;
+                const url = `https://cdn.discordapp.com/emojis/${emoji.id}.webp${emoji.animated ? '?animated=true' : ''}`;
                 const buffer = await fetchBuffer(url);
                 return message.guild.emojis.create({ attachment: buffer, name: emoji.name });
             })
@@ -66,7 +65,7 @@ module.exports = {
                 added.push(name);
             } else {
                 const code = results[i].reason?.code;
-                const reason = ERROR_REASONS[code]?.[lang] ?? `${fr ? 'erreur' : 'error'}: ${code}`;
+                const reason = ERROR_REASONS[code]?.[lang] ?? (fr ? 'erreur inconnue' : 'unknown error');
                 failed.push(`**${name}** — ${reason}`);
             }
         }
