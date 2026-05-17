@@ -12,7 +12,7 @@ module.exports = {
     safeLog(`${prefix} debug logger enabled`);
 
     client.on('ready', () => {
-      safeLog(`${prefix} ready ${client.user?.tag} (${client.user?.id})`);
+      safeLog(`${prefix} ready ${client.user?.username} (${client.user?.id})`);
     });
 
     client.on('invalidated', () => {

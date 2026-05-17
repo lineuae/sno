@@ -1,390 +1,159 @@
-﻿const Discord = require('discord.js');
+const Discord = require('discord.js');
 const fs = require('fs');
-const Snoway = require('../../structures/client/index.js');
+
+const FILE_EMOJIS = {
+    Informations: '🔍',
+    Buyers: '🔰',
+    'Modérations': '⚔',
+    Utilitaires: '🛠',
+    Permissions: '🎭',
+    Logs: '📁',
+    Owner: '🔑',
+    Misc: '🎗',
+};
+
+const FOLDER_ORDER = ['Modérations', 'Informations', 'Utilitaires', 'Misc', 'Logs', 'Permissions', 'Owner', 'Buyers'];
+
 module.exports = {
-    name: "help",
+    name: 'help',
     description: {
         fr: "Affiche les commandes du bot",
         en: "Displays bot commands"
     },
     usage: {
-        fr: {
-            "help [commande]": "Affiche les commandes ou une commande du bot"
-        }, en: {
-            "help [command]": "Displays commands or a bot command"
-        }
+        fr: { "help [commande]": "Affiche les commandes ou une commande du bot" },
+        en: { "help [command]": "Displays commands or a bot command" }
     },
-    /**
-     * 
-     * @param {Snoway} client 
-     * @param {Discord.Message} message 
-     * @param {args[]} args 
-     * @returns 
-     */
     run: async (client, message, args) => {
-        const lang = await client.db.get(`langue`)
-        const aidetext = await client.lang('help.aide')
-        const aide = aidetext.replace("{prefix}", `${client.prefix}`)
+        const lang = await client.db.get('langue') || 'fr';
+        const aidetext = await client.lang('help.aide');
+        const aide = aidetext.replace('{prefix}', client.prefix);
+
         if (args.length === 0) {
-            const cmddanslefichier = fs.readdirSync('./source/commands').filter(folder => folder !== 'DEV');
-            const module = await client.db.get(`module-help`) || 'normal'
+            const folders = fs.readdirSync('./source/commands').filter(f => f !== 'DEV');
+            const module = await client.db.get('module-help') || 'normal';
 
-            const fileEmojis = {
-                Informations: '🔍',
-                Buyers: '🔰',
-                Modérations: '⚔',
-                Utilitaires: '🛠',
-                Permissions: "🎭",
-                Logs: '📁',
-                Owner: '🔑',
-                Misc: '🎗',
-            };
+            const existingFolders = new Set(folders);
+            const orderedFolders = FOLDER_ORDER.filter(f => existingFolders.has(f));
 
-            const folderOrder = [
-                'Modérations',
-                'Informations',
-                'Utilitaires',
-                'Misc',
-                'Logs',
-                'Permissions',
-                'Owner',
-                'Buyers'
-            ];
-
-            const existingFolders = new Set(cmddanslefichier);
-            const orderedExistingFolders = folderOrder.filter((f) => existingFolders.has(f));
-
-            const categoryOrder = {
-                'Modérations': 1,
-                'Informations': 2,
-                'Utilitaires': 3,
-                'Misc': 4,
-                'Logs': 5,
-                'Permissions': 6,
-                'Owner': 7,
-                'Buyers': 8,
-
-            };
-
-
-            if (module === "hybride") {
-                const totalpag = cmddanslefichier.length;
-                let page = 0;
-
-                if (args.length > 0 && !isNaN(args[0])) {
-                    page = parseInt(args[0]) - 1;
-                    if (page < 0) page = 0;
-                    if (page >= totalpag) page = totalpag - 1;
-                }
-
-
-                orderedExistingFolders.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
-
-                const generetapage = (pageactuellement) => {
-                    const fichiertasoeur = orderedExistingFolders[pageactuellement];
-                    const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
-                    const categoryCommands = cmdFiles.map(file => {
-                        let command;
-                        try {
-                            command = require(`../${fichiertasoeur}/${file}`);
-                        } catch (e) {
-                            return null;
-                        }
-                        let usages = null;
-                        let descriptions = null
-                        if (command.usage) {
-                            switch (lang) {
-                                case "fr":
-                                    usages = command.usage.fr;
-                                    break;
-                                case "en":
-                                    usages = command.usage.en;
-                                    break;
-                                default:
-                                    usages = command.usage.fr;
-                            }
-                        }
-
-                        switch (lang) {
-                            case "fr":
-                                descriptions = command.description.fr;
-                                break;
-                            case "en":
-                                descriptions = command.description?.en;
-                                break;
-                            default:
-                                descriptions = command.description.fr;
-                        }
-
-                        const usage = usages || {
-                            [command.name]: descriptions || "Error"
-                        };
-
-                        let description = '';
-                        for (const [key, value] of Object.entries(usage)) {
-                            description += `\n\`${client.prefix}${key}\`\n${value}`;
-                        }
-
-                        return description;
-                    }).filter(Boolean);
-
-                    const embed = new Discord.EmbedBuilder()
-                        .setColor(client.config.color)
-                        .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
-                        .setFooter(client.footer)
-                        .setDescription(`${aide}\n` + categoryCommands.join(''));
-                    const row = new Discord.ActionRowBuilder()
-                        .addComponents(
-                            new Discord.StringSelectMenuBuilder()
-                                .setCustomId('selectMenu')
-                                .setPlaceholder('Snoway')
-                                .addOptions(
-                                    orderedExistingFolders.map(folder => ({
-                                        label: folder,
-                                        value: folder,
-                                        emoji: fileEmojis[folder] || "❌",
-                                    }))
-                                ),
-                        );
-
-                    const rows = new Discord.ActionRowBuilder()
-                        .addComponents(
-                            new Discord.ButtonBuilder()
-                                .setCustomId('page')
-                                .setDisabled(true)
-                                .setStyle(2)
-                                .setLabel(`${categoryOrder[fichiertasoeur]}/${Object.keys(categoryOrder).length}`),
-                        )
-
-                    return { embeds: [embed], components: [row, rows] };
-                };
-
-                const { embeds, components } = generetapage(page);
-                const helpMessage = await message.channel.send({ embeds, components });
-
-                const filter = i => i.customId === 'selectMenu';
-                const collector = helpMessage.createMessageComponentCollector({ filter });
-
-                collector.on('collect', async i => {
-                    if (i.user.id !== message.author.id) {
-                        return i.reply({
-                            content: await client.lang('interaction'),
-                            flags: 64
-                        })
-                    }
-                    const selectedFile = i.values[0];
-                    const page = orderedExistingFolders.indexOf(selectedFile);
-                    const { embeds, components } = generetapage(page);
-                    await i.update({ embeds, components });
-                });
-
-
-            }
-
-            if (module === 'normal') {
-                const totalpag = orderedExistingFolders.length;
-                let page = 0;
-
-                if (args.length > 0 && !isNaN(args[0])) {
-                    page = parseInt(args[0]) - 1;
-                    if (page < 0) page = 0;
-                    if (page >= totalpag) page = totalpag - 1;
-                }
-
-
-                orderedExistingFolders.sort((a, b) => folderOrder.indexOf(a) - folderOrder.indexOf(b));
-
-                const generetapage = (pageactuellement) => {
-                    const fichiertasoeur = orderedExistingFolders[pageactuellement];
-                    const cmdFiles = fs.readdirSync(`./source/commands/${fichiertasoeur}`).filter(file => file.endsWith('.js'));
-                    const categoryCommands = cmdFiles.map(file => {
-                        let command;
-                        try {
-                            command = require(`../${fichiertasoeur}/${file}`);
-                        } catch (e) {
-                            return null;
-                        }
-                        let usages = null;
-                        let descriptions = null
-                        if (command.usage) {
-                            switch (lang) {
-                                case "fr":
-                                    usages = command.usage.fr;
-                                    break;
-                                case "en":
-                                    usages = command.usage.en;
-                                    break;
-                                default:
-                                    usages = command.usage.fr;
-                            }
-                        }
-
-                        switch (lang) {
-                            case "fr":
-                                descriptions = command.description.fr;
-                                break;
-                            case "en":
-                                descriptions = command.description?.en;
-                                break;
-                            default:
-                                descriptions = command.description.fr;
-                        }
-
-                        const usage = usages || {
-                            [command.name]: descriptions || "Error"
-                        };
-
-                        let description = '';
-                        for (const [key, value] of Object.entries(usage)) {
-                            description += `\n\`${client.prefix}${key}\`\n${value}`;
-                        }
-
-                        return description;
-                    }).filter(Boolean);
-
-                    const embed = new Discord.EmbedBuilder()
-                        .setColor(client.config.color)
-                        .setTitle((fileEmojis[fichiertasoeur] || '❌') + " " + fichiertasoeur)
-                        .setFooter(client.footer)
-                        .setDescription(`${aide}\n` + categoryCommands.join(''));
-                    const row = new Discord.ActionRowBuilder()
-                        .addComponents(
-                            new Discord.StringSelectMenuBuilder()
-                                .setCustomId('selectMenu')
-                                .setPlaceholder('Snoway')
-                                .addOptions(
-                                    orderedExistingFolders.map(folder => ({
-                                        label: folder,
-                                        value: folder,
-                                        emoji: fileEmojis[folder] || "❌",
-                                    }))
-                                ),
-                        );
-
-                    const rows = new Discord.ActionRowBuilder()
-                        .addComponents(
-                            new Discord.ButtonBuilder()
-                                .setCustomId('page')
-                                .setDisabled(true)
-                                .setStyle(2)
-                                .setLabel(`${categoryOrder[fichiertasoeur]}/${Object.keys(categoryOrder).length}`),
-                        )
-
-                    return { embeds: [embed], components: [row, rows] };
-                };
-
-                const { embeds, components } = generetapage(page);
-                const helpMessage = await message.channel.send({ embeds, components });
-
-                const filter = i => i.customId === 'selectMenu';
-                const collector = helpMessage.createMessageComponentCollector({ filter });
-
-                collector.on('collect', async i => {
-                    if (i.user.id !== message.author.id) {
-                        return i.reply({
-                            content: await client.lang('interaction'),
-                            flags: 64
-                        })
-                    }
-                    const selectedFile = i.values[0];
-                    const page = orderedExistingFolders.indexOf(selectedFile);
-                    const { embeds, components } = generetapage(page);
-                    await i.update({ embeds, components });
-                });
-
-            }
-
-            if (module === 'button') {
-                return;
-            }
-
-            if (module === "onepage") {
+            if (module === 'onepage') {
                 const formattedCategories = [];
-
-                for (const folder of orderedExistingFolders) {
-                    const cmdfichier = fs.readdirSync(`./source/commands/${folder}`).filter(file => file.endsWith('.js'));
-                    const catecmd = [];
-
-                    for (const file of cmdfichier) {
-                        let command;
-                        try {
-                            command = require(`../${folder}/${file}`);
-                        } catch (e) {
-                            continue;
-                        }
-                        catecmd.push(`${command.name}`);
-                    }
-
-                    formattedCategories.push(`**${fileEmojis[folder]}・${folder}**\n\`${catecmd.join('\`, \`') || await client.lang('help.nocmd')}\``);
+                for (const folder of orderedFolders) {
+                    const cmdFiles = fs.readdirSync(`./source/commands/${folder}`).filter(f => f.endsWith('.js'));
+                    const names = cmdFiles.map(file => {
+                        try { return require(`../${folder}/${file}`).name; } catch { return null; }
+                    }).filter(Boolean);
+                    formattedCategories.push(`**${FILE_EMOJIS[folder] || '❌'}・${folder}**\n\`${names.join('`, `') || await client.lang('help.nocmd')}\``);
                 }
 
-                const helptext = await client.lang('help.help')
-                const text = helptext.replace("{prefix}", `${client.prefix}`)
+                const helptext = await client.lang('help.help');
                 const embed = new Discord.EmbedBuilder()
                     .setColor(client.config.color)
-                    .setAuthor({ name: "Snoway V3", url: client.user.avatarURL(), iconURL: client.user.avatarURL() })
-                    .setDescription(`${await client.lang("help.prefix")} \`${client.prefix}\`\n${await client.lang("help.cmd")} \`${client.commands.size}\`\n${text}\n\n` + formattedCategories.join('\n\n'))
+                    .setAuthor({ name: "Noria V4", url: client.user.avatarURL(), iconURL: client.user.avatarURL() })
+                    .setDescription(
+                        `${await client.lang('help.prefix')} \`${client.prefix}\`\n` +
+                        `${await client.lang('help.cmd')} \`${client.commands.size}\`\n` +
+                        `${helptext.replace('{prefix}', client.prefix)}\n\n` +
+                        formattedCategories.join('\n\n')
+                    )
                     .setFooter(client.footer);
 
-                message.channel.send({ embeds: [embed] });
-            }
-        }
-
-        if (args.length !== 0) {
-            const cmdname = args[0]
-            const command = client.commands.get(cmdname) || client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(cmdname));
-            if (!command) {
-                const noexiste = await client.lang('help.inconnue')
-                const replay = noexiste.replace("{prefix}", `${client.prefix}`)
-                return message.reply(replay);
-            }
-            let usages = null
-            let description = null
-            if (command.usage) {
-                switch (lang) {
-                    case "fr":
-                        usages = command.usage.fr;
-                        break;
-                    case "en":
-                        usages = command.usage.en;
-                        break;
-                    default:
-                        usages = command.usage.fr;
-                }
+                return message.channel.send({ embeds: [embed] });
             }
 
-            switch (lang) {
-                case "fr":
-                    description = command.description.fr;
-                    break;
-                case "en":
-                    description = command.description.en;
-                    break;
-                default:
-                    description = command.description.fr;
-            }
+            // mode "normal" (et "hybride" qui était identique)
+            const buildPage = (pageIndex) => {
+                const folder = orderedFolders[pageIndex];
+                const cmdFiles = fs.readdirSync(`./source/commands/${folder}`).filter(f => f.endsWith('.js'));
+                const descriptions = cmdFiles.map(file => {
+                    let cmd;
+                    try { cmd = require(`../${folder}/${file}`); } catch { return null; }
+                    const usage = cmd.usage?.[lang] || cmd.usage?.fr || { [cmd.name]: cmd.description?.[lang] || cmd.description?.fr || '' };
+                    return Object.entries(usage).map(([k, v]) => `\n\`${client.prefix}${k}\`\n${v}`).join('');
+                }).filter(Boolean);
 
-            const usage = usages || {
-                [command.name]: description || await client.lang('help.description')
-            };
-            const fields = [];
+                const embed = new Discord.EmbedBuilder()
+                    .setColor(client.config.color)
+                    .setTitle(`${FILE_EMOJIS[folder] || '❌'} ${folder}`)
+                    .setFooter(client.footer)
+                    .setDescription(`${aide}\n` + descriptions.join(''));
 
-            for (const [key, value] of Object.entries(usage)) {
-                fields.push({ name: "`" + client.prefix + key + "`", value: value, inline: false });
-            }
-            const embed = new Discord.EmbedBuilder()
-                .setTitle(`${await client.lang('help.command')} ${client.functions.bot.maj(command.name)}`)
-                .setColor(client.config.color)
-                .setFooter(client.footer)
-                .addFields(fields);
-            const row = new Discord.ActionRowBuilder()
-                .addComponents(
+                const row = new Discord.ActionRowBuilder().addComponents(
+                    new Discord.StringSelectMenuBuilder()
+                        .setCustomId('helpMenu')
+                        .setPlaceholder('Noria')
+                        .addOptions(orderedFolders.map(f => ({
+                            label: f,
+                            value: f,
+                            emoji: FILE_EMOJIS[f] || '❌',
+                        })))
+                );
+
+                const pageRow = new Discord.ActionRowBuilder().addComponents(
                     new Discord.ButtonBuilder()
-                        .setStyle(5)
-                        .setURL(client.support)
-                        .setLabel(await client.lang('help.button'))
-                )
-            message.channel.send({ embeds: [embed], components: [row] });
+                        .setCustomId('helpPage')
+                        .setDisabled(true)
+                        .setStyle(Discord.ButtonStyle.Secondary)
+                        .setLabel(`${pageIndex + 1}/${orderedFolders.length}`)
+                );
+
+                return { embeds: [embed], components: [row, pageRow] };
+            };
+
+            let page = 0;
+            if (args.length > 0 && !isNaN(args[0])) {
+                page = Math.max(0, Math.min(parseInt(args[0]) - 1, orderedFolders.length - 1));
+            }
+
+            const helpMessage = await message.channel.send(buildPage(page));
+            const collector = helpMessage.createMessageComponentCollector({
+                filter: i => i.customId === 'helpMenu',
+                time: 120_000
+            });
+
+            collector.on('collect', async i => {
+                if (i.user.id !== message.author.id) {
+                    return i.reply({ content: await client.lang('interaction'), flags: 64 });
+                }
+                const newPage = orderedFolders.indexOf(i.values[0]);
+                await i.update(buildPage(newPage));
+            });
+
+            collector.on('end', () => {
+                helpMessage.edit({ components: [] }).catch(() => {});
+            });
+
+            return;
         }
+
+        // help <commande>
+        const cmdname = args[0].toLowerCase();
+        const command = client.commands.get(cmdname);
+        if (!command) {
+            const msg = (await client.lang('help.inconnue')).replace('{prefix}', client.prefix);
+            return message.reply(msg);
+        }
+
+        const usage = command.usage?.[lang] || command.usage?.fr || { [command.name]: command.description?.[lang] || command.description?.fr || '' };
+        const fields = Object.entries(usage).map(([k, v]) => ({
+            name: `\`${client.prefix}${k}\``,
+            value: v,
+            inline: false
+        }));
+
+        const embed = new Discord.EmbedBuilder()
+            .setTitle(`${await client.lang('help.command')} ${command.name.charAt(0).toUpperCase() + command.name.slice(1)}`)
+            .setColor(client.config.color)
+            .setFooter(client.footer)
+            .addFields(fields);
+
+        const row = new Discord.ActionRowBuilder().addComponents(
+            new Discord.ButtonBuilder()
+                .setStyle(Discord.ButtonStyle.Link)
+                .setURL(client.support)
+                .setLabel(await client.lang('help.button'))
+        );
+
+        message.channel.send({ embeds: [embed], components: [row] });
     }
-}
+};

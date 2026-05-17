@@ -12,8 +12,8 @@ module.exports = {
   run: async (client, message) => {
     if (!message.guild || message.author.bot) return;
     const prefix = await client.db.get(`prefix_${message.guild.id}`) || client.config.prefix
+    client.prefix = prefix
     client.color = await client.db.get(`color_${message.guild.id}`) || client.config.color
-    client.prefix = await client.db.get(`prefix_${message.guild.id}`) || client.config.prefix
     client.noperm = "Tu n'as pas la permission d'utiliser cette commande."
 
 
@@ -36,7 +36,7 @@ module.exports = {
     const commandName = args.shift()?.toLowerCase().normalize();
     if (!commandName) return;
 
-    const cmd = client.commands.get(commandName) || client.aliases.get(commandName);
+    const cmd = client.commands.get(commandName);
     if (!cmd) return;
     if(cmd.category === "DEV" && !client.dev.includes(message.author.id)) return;
     const name = cmd.name;

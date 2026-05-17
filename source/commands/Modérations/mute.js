@@ -1,53 +1,44 @@
-const Discord = require("discord.js");
 const ms = require("../../structures/Utils/ms");
 
-getNow = () => {
-  return {
-    time: new Date().toLocaleString("fr-FR", {
-      timeZone: "Europe/Paris",
-      hour12: false,
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    }),
-  };
-};
-
 module.exports = {
-  name: 'mute',
-  description: {
-    fr: 'Permet de rendre muet un utilisateur du serveur',
-    en: "Mute a server user"
-  },
-  usage: {
-    fr: {"mute <@user/ID> [raison]": "Permet de rendre muet un utilisateur du serveur"},
-    en: {"mute <@user/ID> [reason]": "Mute a server user"}
-  },
-  run: async (client, message, args) => {
-    try {
-      const tempmuteMember = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
-      if (!tempmuteMember) return message.reply({ content: "Veuillez indiquer un membre"});
-      
-      const reason = args.slice(2).join(" ");
-      
-      if (tempmuteMember.id === message.guild.ownerId) {
-        return message.reply('> `❌` Erreur : Vous ne pouvez mute le propriétaire du serveur');
-      }
+    name: 'mute',
+    description: {
+        fr: 'Permet de rendre muet un utilisateur du serveur',
+        en: "Mute a server user"
+    },
+    usage: {
+        fr: { "mute <@user/ID> [durée] [raison]": "Rend muet un utilisateur (durée par défaut: 28j)" },
+        en: { "mute <@user/ID> [duration] [reason]": "Mute a server user (default duration: 28d)" }
+    },
+    run: async (client, message, args) => {
+        const target = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+        if (!target) return message.reply({ content: 'Veuillez indiquer un membre' });
 
-      if (!tempmuteMember || !message.guild.members.cache.has(tempmuteMember.id)) {
-        return message.channel.send("Le membre n'est trouvée");
-      }
+        if (target.id === message.guild.ownerId) {
+            return message.reply('> `❌` Vous ne pouvez pas mute le propriétaire du serveur');
+        }
 
-      await tempmuteMember.timeout(ms("28d"), reason);
-      await message.channel.send({ content: `${tempmuteMember.user} a été **timeout**` });
+        let duration = ms('28d');
+        let reasonStart = 1;
 
-    } catch (error) {
-      if (error.code === 50013) {
-        message.reply("> `❌` Erreur : Je ne peux pas tempmute ce membre");
-        return;
-      }
-      message.channel.send("Une erreur vient de se produire ;..;");
+        if (args[1] && isNaN(args[1])) {
+            const parsed = ms(args[1]);
+            if (parsed) {
+                duration = parsed;
+                reasonStart = 2;
+            }
+        }
 
+        const reason = args.slice(reasonStart).join(' ') || undefined;
+
+        try {
+            await target.timeout(duration, reason);
+            message.channel.send({ content: `${target.user} a été **timeout**` });
+        } catch (error) {
+            if (error.code === 50013) {
+                return message.reply('> `❌` Je ne peux pas mute ce membre');
+            }
+            message.channel.send('> `❌` Une erreur est survenue');
+        }
     }
-  }
 };

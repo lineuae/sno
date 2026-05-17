@@ -13,11 +13,13 @@ const fetchBuffer = (url) => new Promise((resolve, reject) => {
     }).on('error', reject);
 });
 
+const INVALID_EMOJI = { fr: 'emoji introuvable ou invalide', en: 'emoji not found or invalid' };
+
 const ERROR_REASONS = {
     30008: { fr: "slots d'emojis pleins", en: 'emoji slots full' },
     50013: { fr: 'permissions manquantes', en: 'missing permissions' },
-    50035: { fr: 'emoji introuvable ou invalide', en: 'emoji not found or invalid' },
-    50046: { fr: 'emoji introuvable ou invalide', en: 'emoji not found or invalid' },
+    50035: INVALID_EMOJI,
+    50046: INVALID_EMOJI,
 };
 
 module.exports = {

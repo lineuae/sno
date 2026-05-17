@@ -1,6 +1,5 @@
-﻿const Discord = require('discord.js');
+const Discord = require('discord.js');
 const os = require('os');
-const Snoway = require('../../structures/client/index.js');
 
 module.exports = {
     name: 'botinfo',
@@ -8,93 +7,73 @@ module.exports = {
         fr: 'Affiche les informations du bot !',
         en: 'Display bot information!'
     },
-    /**
-     * 
-     * @param {Snoway} client 
-     * @param {Discord.Message} message 
-     * @param {string[]} args 
-     */
-    run: async (client, message, args) => {
+    run: async (client, message) => {
         const dev = await Promise.all(
-            client.dev.map(async (id) => {
-                const user = await client.users.fetch(id);
-                return user.discriminator === 0 ? user.username : user.tag;
-            })
+            client.dev.map(id => client.users.fetch(id).then(u => u.username).catch(() => id))
         );
-        const langue = await client.db.get(`langue`)
+        const langue = await client.db.get('langue');
         const uptime = formatUptime(os.uptime(), langue);
-        const uptimebot = formatUptime(client.uptime / 1000, langue)
+        const uptimebot = formatUptime(client.uptime / 1000, langue);
         const totalMemory = formatBytes(os.totalmem());
-        const usedMemory = format(os.totalmem() - os.freemem())
+        const usedMemory = formatBytes(os.totalmem() - os.freemem());
+
         const embed = new Discord.EmbedBuilder()
             .setTitle('Mes statistiques')
             .setColor(client.config.color)
-            .setFooter({text: "Botinfo inspiré de celui de Caredas"})
-            .addFields({
-                name: "Statistique du bot", 
-                value:`\`\`\`ANSI\n` +
-                `[1;31mDéveloppeur:[0m [107;49m${dev.join(', ')}[0m\n` +
-                `[1;31mCommandes:[0m [107;49m${client.commands.size}[0m\n` +
-                `[1;31mServeurs:[0m [107;49m${client.guilds.cache.size}[0m\n` +
-                `[1;31mChannels:[0m [107;49m${client.channels.cache.size}[0m\n` +
-                `[1;31mMembres:[0m [107;49m${client.users.cache.size}[0m\n` +
-                `[1;31mNodeJs:[0m [107;49m${process.version}[0m\n` +
-                `[1;31mDiscordJs:[0m [107;49mv${Discord.version}[0m\n` +
-                `[1;31mUptime:[0m [107;49m${uptimebot}[0m\n` +
-                `\`\`\``} , {
-                name: "Statistique du VPS",
-                value: `\`\`\`ANSI\n` +
-                    `[1;31mUptime:[0m [107;49m${uptime}[0m\n` +
-                    `[1;31mCPU Cores:[0m [107;49m${os.cpus().length}[0m\n` +
-                    `[1;31mRAM:[0m [107;49m${usedMemory}/${totalMemory}[0m\n` +
-                    `\`\`\``
-            });
+            .setFooter({ text: "Botinfo inspiré de celui de Caredas" })
+            .addFields(
+                {
+                    name: "Statistique du bot",
+                    value:
+                        `\`\`\`ANSI\n` +
+                        `[1;31mDéveloppeur:[0m [107;49m${dev.join(', ')}[0m\n` +
+                        `[1;31mCommandes:[0m [107;49m${client.commands.size}[0m\n` +
+                        `[1;31mServeurs:[0m [107;49m${client.guilds.cache.size}[0m\n` +
+                        `[1;31mChannels:[0m [107;49m${client.channels.cache.size}[0m\n` +
+                        `[1;31mMembres:[0m [107;49m${client.users.cache.size}[0m\n` +
+                        `[1;31mNodeJs:[0m [107;49m${process.version}[0m\n` +
+                        `[1;31mDiscordJs:[0m [107;49mv${Discord.version}[0m\n` +
+                        `[1;31mUptime:[0m [107;49m${uptimebot}[0m\n` +
+                        `\`\`\``
+                },
+                {
+                    name: "Statistique du VPS",
+                    value:
+                        `\`\`\`ANSI\n` +
+                        `[1;31mUptime:[0m [107;49m${uptime}[0m\n` +
+                        `[1;31mCPU Cores:[0m [107;49m${os.cpus().length}[0m\n` +
+                        `[1;31mRAM:[0m [107;49m${usedMemory}/${totalMemory}[0m\n` +
+                        `\`\`\``
+                }
+            );
 
-
-
-
-        message.reply({
-            embeds: [embed]
-        });
+        message.reply({ embeds: [embed] });
     },
 };
 
 function formatUptime(uptime, lang) {
-    const timeUnits = lang === 'fr' ? ['jours', 'heures', 'minutes', 'secondes'] : ['days', 'hours', 'minutes', 'seconds'];
-    
-    const seconds = Math.floor(uptime % 60);
-    const minutes = Math.floor((uptime / 60) % 60);
-    const hours = Math.floor((uptime / 3600) % 24);
+    const units = lang === 'fr'
+        ? ['jour', 'heure', 'minute', 'seconde']
+        : ['day', 'hour', 'minute', 'second'];
+
     const days = Math.floor(uptime / 86400);
+    const hours = Math.floor((uptime / 3600) % 24);
+    const minutes = Math.floor((uptime / 60) % 60);
+    const seconds = Math.floor(uptime % 60);
 
-    const formattedTime = [];
-    
-    if (days > 0) {
-        formattedTime.push(`${days} ${days > 1 ? timeUnits[0] : timeUnits[0].slice(0, -1)}`);
-    }
-
-    if (hours > 0) {
-        formattedTime.push(`${hours} ${hours > 1 ? timeUnits[1] : timeUnits[1].slice(0, -1)}`);
-    }
-
-    if (minutes > 0) {
-        formattedTime.push(`${minutes} ${minutes > 1 ? timeUnits[2] : timeUnits[2].slice(0, -1)}`);
-    }
-
-    if (seconds > 0) {
-        formattedTime.push(`${seconds} ${seconds > 1 ? timeUnits[3] : timeUnits[3].slice(0, -1)}`);
-    }
-
-    return formattedTime.join(', ');
+    return [
+        [days, units[0]],
+        [hours, units[1]],
+        [minutes, units[2]],
+        [seconds, units[3]],
+    ]
+        .filter(([n]) => n > 0)
+        .map(([n, u]) => `${n} ${u}${n > 1 ? 's' : ''}`)
+        .join(', ');
 }
 
 function formatBytes(bytes) {
     const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     const i = Math.floor(Math.log2(bytes) / 10);
     return `${(bytes / Math.pow(2, 10 * i)).toFixed(2)} ${sizes[i]}`;
-}
-
-function format(bytes) {
-    const i = Math.floor(Math.log2(bytes) / 10);
-    return `${(bytes / Math.pow(2, 10 * i)).toFixed(2)}`;
 }
