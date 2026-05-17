@@ -1,56 +1,79 @@
-const Snoway = require("../../structures/client");
-const Discord = require('discord.js');
+const ERROR_REASONS = {
+    30008: { fr: "slots d'emojis pleins", en: 'emoji slots full' },
+    50013: { fr: 'permissions manquantes', en: 'missing permissions' },
+};
 
 module.exports = {
     name: 'create',
     description: {
-        fr: "Permet de copier un emoji pour l\'ajouter au serveur",
+        fr: "Permet de copier un emoji pour l'ajouter au serveur",
         en: "Copy an emoji to add it to the server"
     },
     aliases: ["emoji"],
     usage: {
-        fr: {
-            "emoji <1-50 émojis>": "Permet de copier un ou plusieurs emoji(s) pour les ajouter au serveur"
-        }, en: {
-            "emoji <1-50 emojis>": "Allows you to copy one or more emoji(s) to add them to the server"
-        }
+        fr: { "emoji <1-50 émojis>": "Copie un ou plusieurs emoji(s) sur le serveur" },
+        en: { "emoji <1-50 emojis>": "Copy one or more emoji(s) to the server" }
     },
-    /**
-     * 
-     * @param {Snoway} client 
-     * @param {Discord.Message} message 
-     * @param {string[]} args 
-     * @returns 
-     */
     run: async (client, message, args) => {
-        const emojiRegex = /<a?:([a-zA-Z0-9_]+):(\d+)>/;
-        let creeemojis = 0;
-        let errors = [];
+        const lang = (await client.db.get('langue')) || 'fr';
+        const fr = lang === 'fr';
+        const pl = (n) => n !== 1 ? 's' : '';
 
-        for (const rawEmoji of args) {
-            const match = rawEmoji.match(emojiRegex);
-            if (!match) continue;
+        const emojis = [...args.join(' ').matchAll(/<a?:([a-zA-Z0-9_]+):(\d+)>/g)].map(m => ({
+            name: m[1],
+            id: m[2],
+            animated: m[0].startsWith('<a:'),
+        }));
 
-            const name = match[1];
-            const id = match[2];
-            const animated = rawEmoji.startsWith("<a:");
-            const url = `https://cdn.discordapp.com/emojis/${id}.${animated ? 'gif' : 'png'}`;
+        if (emojis.length === 0) {
+            return message.channel.send(
+                fr ? 'Veuillez fournir au moins un emoji personnalisé.' : 'Please provide at least one custom emoji.'
+            );
+        }
 
-            try {
-                await message.guild.emojis.create({ attachment: url, name });
-                creeemojis++;
-            } catch (error) {
-                console.error(`Emoji error ${name}:`, error.message);
-                errors.push(`${name}: ${error.message}`);
+        const results = await Promise.allSettled(
+            emojis.map(emoji =>
+                message.guild.emojis.create({
+                    attachment: `https://cdn.discordapp.com/emojis/${emoji.id}.${emoji.animated ? 'gif' : 'png'}`,
+                    name: emoji.name,
+                })
+            )
+        );
+
+        const added = [];
+        const failed = [];
+
+        for (let i = 0; i < results.length; i++) {
+            const { name } = emojis[i];
+            if (results[i].status === 'fulfilled') {
+                added.push(name);
+            } else {
+                const code = results[i].reason?.code;
+                const reason = ERROR_REASONS[code]?.[lang] ?? results[i].reason?.message;
+                failed.push(`\`${name}\`: ${reason}`);
             }
         }
 
-        if (creeemojis > 0) {
-            message.channel.send(`${creeemojis} émoji${creeemojis !== 1 ? 's' : ''} ${await client.lang('emoji.create')}${creeemojis !== 1 ? 's' : ''}`);
+        const lines = [];
+
+        if (added.length > 0) {
+            const n = added.length;
+            lines.push(
+                fr
+                    ? `${n} emoji${pl(n)} ajouté${pl(n)} : ${added.map(x => `\`${x}\``).join(', ')}`
+                    : `${n} emoji${pl(n)} added: ${added.map(x => `\`${x}\``).join(', ')}`
+            );
         }
 
-        if (errors.length > 0) {
-            message.channel.send(`${await client.lang('erreur')}\n\`\`\`${errors.join('\n')}\`\`\``);
+        if (failed.length > 0) {
+            const n = failed.length;
+            lines.push(
+                fr
+                    ? `Échec sur ${n} emoji${pl(n)} :\n${failed.join('\n')}`
+                    : `Failed on ${n} emoji${pl(n)}:\n${failed.join('\n')}`
+            );
         }
+
+        if (lines.length > 0) message.channel.send(lines.join('\n\n'));
     },
 };
