@@ -24,7 +24,6 @@ module.exports = {
      */
     run: async (client, message, args) => {
         const emojiRegex = /<a?:([a-zA-Z0-9_]+):(\d+)>/;
-        const totalEmojis = args.length;
         let creeemojis = 0;
         let errors = [];
 
@@ -34,14 +33,32 @@ module.exports = {
             if (emojiss) {
                 const emojiName = emojiss[1];
                 const emojiId = emojiss[2];
-                const extension = rawEmoji.startsWith("<a:") ? ".gif" : ".png";
-                const url = `https://cdn.discordapp.com/emojis/${emojiId}${extension}`;
+                const isAnimated = rawEmoji.startsWith("<a:");
+                const extension = isAnimated ? "gif" : "png";
+                const url = `https://cdn.discordapp.com/emojis/${emojiId}.${extension}?size=4096`;
 
                 try {
-                    await message.guild.emojis.create({ attachment: url, name: emojiName });
+                    const response = await fetch(url, {
+                        headers: {
+                            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                    }
+
+                    const buffer = Buffer.from(await response.arrayBuffer());
+
+                    await message.guild.emojis.create({
+                        attachment: buffer,
+                        name: emojiName,
+                        animated: isAnimated
+                    });
+
                     creeemojis++;
                 } catch (error) {
-                    console.error(`Erreur création emoji "${emojiName}":`, error);
+                    console.error(`Erreur création emoji "${emojiName}" (ID: ${emojiId}):`, error);
                     errors.push(`${emojiName}: ${error.message}`);
                 }
             }
