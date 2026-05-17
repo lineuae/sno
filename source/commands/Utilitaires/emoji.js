@@ -23,28 +23,37 @@ module.exports = {
      * @returns 
      */
     run: async (client, message, args) => {
-        const emojiRegex = /<a?:[a-zA-Z0-9_]+:(\d+)>/;
+        const emojiRegex = /<a?:([a-zA-Z0-9_]+):(\d+)>/;
         const totalEmojis = args.length;
         let creeemojis = 0;
+        let errors = [];
+
         for (const rawEmoji of args) {
             const emojiss = rawEmoji.match(emojiRegex);
 
             if (emojiss) {
-                const emojiId = emojiss[1];
+                const emojiName = emojiss[1];
+                const emojiId = emojiss[2];
                 const extension = rawEmoji.startsWith("<a:") ? ".gif" : ".png";
-                const url = `https://cdn.discordapp.com/emojis/${emojiId + extension}`;
+                const url = `https://cdn.discordapp.com/emojis/${emojiId}${extension}`;
 
-                message.guild.emojis.create({ attachment: url, name: emojiId })
-                    .then(async (emoji) => {
-                        creeemojis++;
-                        if (creeemojis === totalEmojis) {
-                            message.channel.send(`${creeemojis} émoji${creeemojis !== 1 ? "s" : ""} ${await client.lang('emoji.create')}${creeemojis !== 1 ? "s" : ""}`);
-                        }
-                    })
-                    .catch(async (error) => {
-                        message.channel.send({ content: await client.lang('erreur') });
-                    });
+                try {
+                    await message.guild.emojis.create({ attachment: url, name: emojiName });
+                    creeemojis++;
+                } catch (error) {
+                    console.error(`Erreur création emoji "${emojiName}":`, error);
+                    errors.push(`${emojiName}: ${error.message}`);
+                }
             }
+        }
+
+        if (creeemojis > 0) {
+            const successMsg = await client.lang('emoji.create');
+            message.channel.send(`${creeemojis} émoji${creeemojis !== 1 ? "s" : ""} ${successMsg}${creeemojis !== 1 ? "s" : ""}`);
+        }
+
+        if (errors.length > 0) {
+            message.channel.send({ content: `${await client.lang('erreur')}\n\`\`\`${errors.join('\n')}\`\`\`` });
         }
     },
 };

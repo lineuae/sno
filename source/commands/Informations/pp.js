@@ -1,4 +1,4 @@
-const Discord = require('discord.js');
+const { EmbedBuilder, ButtonBuilder, ActionRowBuilder, ButtonStyle } = require('discord.js');
 
 module.exports = {
     name: 'pp',
@@ -42,13 +42,23 @@ module.exports = {
             return message.reply('❌ Utilisateur introuvable.');
         }
 
-        const avatarURL = user.displayAvatarURL({ dynamic: true, size: 4096 });
-        const embed = new Discord.EmbedBuilder()
+        const avatarURL = user.displayAvatarURL({ extension: 'png', size: 4096, forceStatic: false });
+        const avatarURLHighQuality = user.displayAvatarURL({ extension: 'png', size: 4096 });
+
+        const embed = new EmbedBuilder()
             .setTitle(`Photo de profil de ${user.username}`)
             .setColor(client.config.color)
             .setImage(avatarURL)
-            .setFooter({ text: `Demandé par ${message.author.username}`, iconURL: message.author.displayAvatarURL() });
+            .setFooter({ text: `Demandé par ${message.author.username}`, iconURL: message.author.displayAvatarURL({ extension: 'png', size: 128 }) });
 
-        message.channel.send({ embeds: [embed] });
+        const row = new ActionRowBuilder()
+            .addComponents(
+                new ButtonBuilder()
+                    .setLabel('Voir en HD')
+                    .setStyle(ButtonStyle.Link)
+                    .setURL(avatarURLHighQuality)
+            );
+
+        message.channel.send({ embeds: [embed], components: [row] });
     }
 };
