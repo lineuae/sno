@@ -22,17 +22,16 @@ module.exports = {
                 if (!option) return interaction.editReply({content: "Impossible de récupère les données !"});
                 const tickeruser = await client.db.get(`ticket_user_${interaction.guild.id}`) || [];
 
-                const resul = tickeruser.find(ticket => ticket.author === interaction.user.id);
-                if (resul && tickeruser.length >= db?.maxticket) {
+                const userTickets = tickeruser.filter(ticket => ticket.author === interaction.user.id);
+                if (db?.maxticket && userTickets.length >= db.maxticket) {
                     return await interaction.editReply({ content: await client.lang('ticket.event.maxticket') });
                 }
 
-                
-                if (interaction.member.roles.cache.some(role => db.rolerequis.includes(role.id))) {
+                if (db.rolerequis?.length > 0 && !interaction.member.roles.cache.some(role => db.rolerequis.includes(role.id))) {
                     return await interaction.editReply({ content: await client.lang('ticket.event.norequisrole') });
                 }
 
-                if (interaction.member.roles.cache.some(role => db.roleinterdit.includes(role.id))) {
+                if (db.roleinterdit?.length > 0 && interaction.member.roles.cache.some(role => db.roleinterdit.includes(role.id))) {
                     return await interaction.editReply({ content: await client.lang('ticket.event.roleinterdit')});
                 }
           

@@ -47,7 +47,7 @@ module.exports = {
 
         function getChannelName(logs, type) {
             const log = logs.find(obj => obj.hasOwnProperty(type));
-            return `\`\`\`js\n${log && log[type] ? client.channels.cache.get(log[type]).name : "Aucun"}\`\`\``;
+            return `\`\`\`js\n${log && log[type] ? (client.channels.cache.get(log[type])?.name ?? "Introuvable") : "Aucun"}\`\`\``;
         }
     },
 };

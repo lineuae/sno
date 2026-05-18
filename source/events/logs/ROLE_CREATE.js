@@ -17,8 +17,8 @@ module.exports = {
             limit: 1,
             type: 30
         }).then(audit => audit.entries.first());
-        const user = fetchedLogs ? fetchedLogs.executor : "Inconnu";
-
+        const executor = fetchedLogs?.executor;
+        const userStr = executor ? `${executor.username} (ID: ${executor.id})` : "Inconnu";
 
         const embed = new EmbedBuilder()
             .setColor(color)
@@ -35,7 +35,7 @@ module.exports = {
             }, {
                 name: "Mentionable", value: `\`\`\`js\n${role.mentionable ? "Oui" : "Non"}\`\`\``, inline: true
             }, {
-                name: "Auteur", value: `\`\`\`js\n${user.tag} (ID: ${user.id})\`\`\``, inline: true
+                name: "Auteur", value: `\`\`\`js\n${userStr}\`\`\``, inline: true
             })
 
         salon.send({

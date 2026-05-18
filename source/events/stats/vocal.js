@@ -1,12 +1,15 @@
 const Snoway = require("../../structures/client/index");
 
+let vocalInterval = null;
+
 module.exports = {
     name: "clientReady",
     /**
      * @param {Snoway} client
      */
     run: async (client) => {
-        setInterval(() => {
+        if (vocalInterval) return;
+        vocalInterval = setInterval(() => {
             client.guilds.cache.forEach(guild => {
                 guild.members.cache.forEach(member => {
                     if (member.voice.channel && !member.voice.afk && !member.user.bot) {

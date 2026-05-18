@@ -28,10 +28,6 @@ module.exports = {
             message.channel.send(response)
             return; 
         }
-        if (!langCode) {
-            return message.channel.send(await client.lang('langue.erreur')).catch(() => {});
-        }
-
         if (!isValidLanguage(langCode)) {
             return message.channel.send(await client.lang('langue.invalide')).catch(() => {});
         }

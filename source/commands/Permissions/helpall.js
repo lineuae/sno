@@ -31,7 +31,8 @@ module.exports = {
             for (let i = startIndex; i < endIndex && i < permissionsArray.length; i++) {
                 const [permission, data] = permissionsArray[i];
                 const commands = data.commands && data.commands.length > 0 ? data.commands.join(', ') : "Non configuré";
-                const roles = data.roles && data.roles.length > 0 ? data.roles.map(roleId => `<@&${roleId}>`).join(', ') : "Aucun rôle";
+                const roleData = data.role ? (Array.isArray(data.role) ? data.role : [data.role]) : [];
+                const roles = roleData.length > 0 ? roleData.map(roleId => `<@&${roleId}>`).join(', ') : "Aucun rôle";
 
                 info = {
                     perm: permission,
@@ -83,7 +84,7 @@ module.exports = {
 
         const sentMessage = await message.reply({ embeds: [embed], components: [row] });
 
-        const collector = sentMessage.createMessageComponentCollector();
+        const collector = sentMessage.createMessageComponentCollector({ time: 120_000 });
 
         collector.on('collect', async (interaction) => {
             if (interaction.user.id !== message.author.id) {

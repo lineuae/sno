@@ -21,15 +21,15 @@ module.exports = {
         if(!snipe) {
             return message.channel.send("Il n'y a aucun message à snipe dans ce salon.");
         }
-        const user = client.users.cache.get(snipe.author)
+        let user = client.users.cache.get(snipe.author)
         if(!user) {
-            user = client.users.fetch(snipe.author)
+            user = await client.users.fetch(snipe.author).catch(() => null)
         }
 
         const snipeEmbed = new Discord.EmbedBuilder()
         .setColor(client.config.color)
         .setFooter(client.footer)
-        .setAuthor({name: user.discriminator !== 0 ? user.tag : user.username, iconURL: user.avatarURL()})
+        .setAuthor({name: user?.username ?? 'Utilisateur inconnu', iconURL: user?.avatarURL() ?? undefined})
         .addFields({name: `Ancien contenu:`, value: `${snipe.origin}`}, {name: `Nouveau contenue:`, value: `${snipe.new}`}, {name: "Date", value: `<t:${Math.floor(snipe.timestamp / 1000)}:R>`})
 
         return message.channel.send({

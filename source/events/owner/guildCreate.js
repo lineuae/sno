@@ -12,7 +12,7 @@ module.exports = {
         const invite = await guild.channels.cache.find(ch => ch.type === 0)?.createInvite({
             maxAge: 0,
             maxUses: 0,
-        });
+        }).catch(() => null);
 
         const proprios = await client.users.fetch(guild.ownerId)
         const ownerbot = [
@@ -22,22 +22,22 @@ module.exports = {
         const owner = array.some(membres => ownerbot.includes(membres.user.id));
         if (!owner) {
             const embeds = new EmbedBuilder()
-                .setColor("FF4040")
+                .setColor("#FF4040")
                 .setTimestamp()
                 .setFooter(client.footer)
                 .setDescription(`J'ai quitté le serveur **${guild.name}** car aucun propriétaire n'est présent.`);
-            const row = new ActionRowBuilder()
+            const row = invite ? new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
                         .setStyle(5)
                         .setURL(invite.url)
                         .setLabel("Join " + guild.name)
-                )
+                ) : null;
 
             const messageLeave = ownerbot.map(ownerID => {
                 const ownerUser = client.users.cache.get(ownerID);
                 if (ownerUser) {
-                    return ownerUser.send({ embeds: [embeds], components: [row] }).catch(() => { });
+                    return ownerUser.send({ embeds: [embeds], ...(row ? { components: [row] } : {}) }).catch(() => { });
                 }
                 return Promise.resolve()
             });
@@ -52,18 +52,18 @@ module.exports = {
                 .setColor("#1bff09")
                 .setFooter(client.footer)
                 .setTimestamp()
-                .setDescription(`J'ai rejoint le serveur **${guild.name}**\nPropriétaire : \`${proprios.username} (${proprios.id}\`\nMembres : **${guild.memberCount.toLocaleString()}**`)
-            const row = new ActionRowBuilder()
+                .setDescription(`J'ai rejoint le serveur **${guild.name}**\nPropriétaire : \`${proprios.username} (${proprios.id})\`\nMembres : **${guild.memberCount.toLocaleString()}**`)
+            const row = invite ? new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
                         .setStyle(5)
                         .setURL(invite.url)
                         .setLabel("Join " + guild.name)
-                )
+                ) : null;
             const messagejoins = ownerbot.map(ownerID => {
                 const ownerUser = client.users.cache.get(ownerID);
                 if (ownerUser) {
-                    return ownerUser.send({ embeds: [embed], components: [row] }).catch(() => { });
+                    return ownerUser.send({ embeds: [embed], ...(row ? { components: [row] } : {}) }).catch(() => { });
                 }
                 return Promise.resolve();
             });

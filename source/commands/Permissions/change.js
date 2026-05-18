@@ -54,7 +54,7 @@ module.exports = {
                 newPermissions['public'] = publicPermissionIndex;
             } else {
                 const permIndex = `perm${permission}`;
-                const permissionData = newPermissions[permIndex] || { roles: [], commands: [] };
+                const permissionData = newPermissions[permIndex] || { role: null, commands: [] };
                 if (!permissionData.commands.includes(commandName)) {
                     permissionData.commands.push(commandName);
                 }

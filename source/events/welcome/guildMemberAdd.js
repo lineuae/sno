@@ -56,7 +56,7 @@ module.exports = {
             }
             
             await channel.send(messageOptions);
-            console.log(`[Welcome] Message sent for ${member.user.tag} in ${member.guild.name}`);
+            console.log(`[Welcome] Message sent for ${member.user.username} in ${member.guild.name}`);
         } catch (error) {
             console.error(`[Welcome] Error sending welcome message:`, error);
         }

@@ -1,6 +1,8 @@
-const { EmbedBuilder } = require("@discordjs/builders");
+const { EmbedBuilder } = require("discord.js");
 const Snoway = require("../../structures/client/index");
 const ms = require('../../structures/Utils/ms');
+
+let remindInterval = null;
 
 module.exports = {
     name: "clientReady",
@@ -8,7 +10,8 @@ module.exports = {
      * @param {Snoway} client
      */
     run: async (client) => {
-        setInterval(() => { checkReminders(client); }, ms('10s'));
+        if (remindInterval) return;
+        remindInterval = setInterval(() => { checkReminders(client); }, ms('10s'));
     }
 };
 

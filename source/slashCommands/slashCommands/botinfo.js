@@ -20,7 +20,7 @@ module.exports = {
         const dev = await Promise.all(
             client.dev.map(async (id) => {
                 const user = await client.users.fetch(id);
-                return user.discriminator === 0 ? user.username : user.tag;
+                return user.username;
             })
         );
         const color = await client.db.get(`color_${interaction.guild.id}`) || client.config.color

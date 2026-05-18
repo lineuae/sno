@@ -58,7 +58,7 @@ module.exports = {
 
     await sendMuteList();
 
-    const collector = msg.createMessageComponentCollector();
+    const collector = msg.createMessageComponentCollector({ time: 120_000 });
 
     collector.on('collect', async (button) => {
         if (button.user.id !== message.author.id) {
@@ -75,5 +75,9 @@ module.exports = {
   
         await sendMuteList();
       });
+
+    collector.on('end', () => {
+        msg.edit({ components: [] }).catch(() => {});
+    });
   },
 };

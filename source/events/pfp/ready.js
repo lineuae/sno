@@ -2,6 +2,8 @@ const Discord = require("discord.js");
 const Snoway = require("../../structures/client/index");
 const { ms } = require("../../structures/Utils");
 
+let pfpInterval = null;
+
 module.exports = {
     name: "clientReady",
     /**
@@ -9,7 +11,8 @@ module.exports = {
      * @param {Snoway} client
      */
     run: async (client) => {
-        setInterval(() => { 
+        if (pfpInterval) return;
+        pfpInterval = setInterval(() => {
         client.guilds.cache.forEach(async guild => {
             const color = await client.db.get(`color_${guild.id}`) || client.config.color;
             const channelID = await client.db.get(`pfp_${guild.id}`);
@@ -33,7 +36,7 @@ module.exports = {
 
             const embed = new Discord.EmbedBuilder()
                 .setColor(color)
-                .setDescription(`[${randomMember.user.discriminator !== 0 ? randomMember.user.tag : randomMember.user.username}](https://discord://-/users/${randomMember.user.id})`)
+                .setDescription(`[${randomMember.user.username}](https://discord://-/users/${randomMember.user.id})`)
                 .setImage(randomImageURL)
                 .setFooter(client.footer);
 

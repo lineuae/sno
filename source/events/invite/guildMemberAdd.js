@@ -15,6 +15,8 @@ module.exports = {
         const guildInvites = invitesData.get(guild.id);
         const currentInvites = await guild.invites.fetch();
 
+        if (!guildInvites) return;
+
         guildInvites.forEach((inviterInvites, inviterId) => {
             inviterInvites.forEach(async inviteData => {
                 const currentInvite = currentInvites.find(inv => inv.code === inviteData.code);
@@ -24,10 +26,10 @@ module.exports = {
                     const difference = usesAfter - usesBefore;
                     const user = client.users.cache.get(inviterId)
                     if (difference > 0) {
-                        console.log(`Inviter par ${inviteData.code} par ${user.tag}`);
+                        console.log(`Invité par ${inviteData.code} par ${user?.username ?? inviterId}`);
                         let db = await client.db.get(`invite_user_${member.guild.id}`) || [];
-                        let result = db.find(user => user.id === inviterId);
-                        
+                        let result = db.find(entry => entry.id === inviterId);
+
                         if (!result) {
                             result = {
                                 id: inviterId,
@@ -37,13 +39,13 @@ module.exports = {
                                 left: 0,
                                 bonus: 0
                             };
+                            db.push(result);
                         }
-                        
+
                         result.total++;
                         result.valid++;
-                        db.push(result);
                         await client.db.set(`invite_user_${member.guild.id}`, db);
-                        
+
                     }
                 }
             });

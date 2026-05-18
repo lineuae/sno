@@ -10,17 +10,12 @@ module.exports = {
      * @returns 
      */
     run: async (client, oldUser, newUser) => {
+        if (oldUser.bot) return;
         if (oldUser.username !== newUser.username) {
-            if (oldUser.bot) return;
-            const prevname = oldUser.username;
-            const userId = oldUser.id;
-            console.log(`NEW PREVNAME: ${oldUser.username} --> ${newUser.username}`)
-            await client.api.prevadd(userId, prevname)
-        } if(oldUser.globalName !== newUser.globalName) {
-            const prevname = oldUser.globalName;
-            const userId = oldUser.id;
-            console.log(`NEW PREVNAME: ${oldUser.globalName} --> ${newUser.globalName}`)
-            await client.api.prevadd(userId, prevname)
+            console.log(`USERNAME: ${oldUser.username} --> ${newUser.username}`)
+        }
+        if (oldUser.globalName !== newUser.globalName) {
+            console.log(`GLOBALNAME: ${oldUser.globalName} --> ${newUser.globalName}`)
         }
     },
 };

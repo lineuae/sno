@@ -83,7 +83,11 @@ module.exports = {
             )
         const msg = await message.channel.send({ content: `**Panel de création d'embeds de ${message.guild.name}**`, embeds: [embed], components: [row, rowButton] });
 
-        const collector = msg.createMessageComponentCollector();
+        const collector = msg.createMessageComponentCollector({ time: 600_000 });
+
+        collector.on('end', () => {
+            msg.edit({ components: [] }).catch(() => {});
+        });
 
         collector.on('collect', async i => {
             if (i.user.id !== message.author.id) {
@@ -100,7 +104,7 @@ module.exports = {
                 switch (option) {
                     case 'titre':
                         const replyTitle = await msg.reply('Merci de me donner le nouveau titre de l\'embed');
-                        const responseTitle = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+                        const responseTitle = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
 
                         responseTitle.on('collect', async m => {
                             const title = m.content.trim();
@@ -127,7 +131,7 @@ module.exports = {
 
                     case 'description':
                         const replyDescription = await msg.reply('Entrez la nouvelle description de l\'embed :');
-                        const responseDescription = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+                        const responseDescription = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
 
                         responseDescription.on('collect', async m => {
                             const description = m.content.trim();
@@ -152,7 +156,7 @@ module.exports = {
                         break;
                     case 'color':
                         const reply = await msg.reply('Merci de me donner la nouvelle couleur de l\'embeds');
-                        const responseCollector = message.channel.createMessageCollector();
+                        const responseCollector = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
 
                         responseCollector.on('collect', async m => {
                             const color = m.content.trim();
@@ -170,7 +174,7 @@ module.exports = {
                         break;
                     case 'image':
                         const replyImage = await msg.reply('Merci de me donner le lien de la nouvelle image de l\'embed');
-                        const responseImage = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+                        const responseImage = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
 
                         responseImage.on('collect', async m => {
                             const imageUrl = m.attachments.first()?.url;
@@ -192,7 +196,7 @@ module.exports = {
                         break;
                     case 'thumbnail':
                         const replyThumbnail = await msg.reply('Merci de me donner le lien du nouveau thumbnail de l\'embed');
-                        const responseThumbnail = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+                        const responseThumbnail = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
 
                         responseThumbnail.on('collect', async m => {
                             const thumbnailUrl = m.attachments.first()?.url;
@@ -215,7 +219,7 @@ module.exports = {
 
                     case 'auteur':
                         const replyAskName = await msg.reply('Merci de me donner le nom de l\'auteur de l\'embed. Si vous ne souhaitez pas ajouter d\'auteur, répondez \`non\`.');
-                        const responseName = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+                        const responseName = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
 
                         let authorName = '';
 
@@ -233,7 +237,7 @@ module.exports = {
                                 responseName.stop();
 
                                 const replyAskURL = await msg.reply('Merci de me donner l\'URL de l\'auteur de l\'embed. Si vous ne souhaitez pas ajouter d\'auteur, répondez \`non\`.');
-                                const responseURL = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+                                const responseURL = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
 
                                 responseURL.on('collect', async m => {
                                     const urlResponse = m.content.trim();
@@ -283,7 +287,7 @@ module.exports = {
                             }
 
                             if (footerText.toLowerCase() === 'non') {
-                                embed.setFooter(footerText);
+                                embed.setFooter({ text: footerText });
                                 await msg.edit({ embeds: [embed] });
                                 return;
                             }
@@ -331,7 +335,7 @@ module.exports = {
                     case 'copy':
                         const copyRequest = await msg.reply("Merci de fournir l'ID du message contenant l'embed que vous souhaitez copier.");
 
-                        const copyCollector = message.channel.createMessageCollector(m => m.author.id === message.author.id, { time: 60000 });
+                        const copyCollector = message.channel.createMessageCollector({ filter: m => m.author.id === message.author.id, time: 60000 });
 
                         copyCollector.on('collect', async m => {
                             const messageID = m.content.trim();

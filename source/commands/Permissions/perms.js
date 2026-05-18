@@ -22,7 +22,8 @@ module.exports = {
     for (let i = 1; i <= 9; i++) {
       const permnames = `perm${i}`;
       const permission = permissions[permnames];
-      const roles = permission.roles ? permission.roles.map(roleId => `<@&${roleId}>`).join(', ') : 'Aucun rôle';
+      const roleData = permission.role;
+      const roles = roleData ? (Array.isArray(roleData) ? roleData : [roleData]).map(roleId => `<@&${roleId}>`).join(', ') : 'Aucun rôle';
 
       embed.addFields({ name: `Permission ${i}`, value: `${roles}`, inline: true });
     }

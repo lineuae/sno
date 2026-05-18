@@ -38,7 +38,8 @@ module.exports = {
             limit: 1,
             type: 12
         }).then(audit => audit.entries.first());
-        const user = fetchedLogs ? fetchedLogs.executor : "Inconnu";
+        const executor = fetchedLogs?.executor;
+        const userStr = executor ? `${executor.username} (ID: ${executor.id})` : "Inconnu";
 
         const embed = new EmbedBuilder()
             .setColor(color)
@@ -47,7 +48,7 @@ module.exports = {
             .addFields({ name: "Nom", value: `\`\`\`js\n${channel.name}\`\`\``, inline: true })
             .addFields({ name: "ID", value: `\`\`\`js\n${channel.id}\`\`\``, inline: true })
             .addFields({ name: "Type", value: `\`\`\`js\n${channeltype}\`\`\``, inline: true })
-            .addFields({ name: "Auteur", value: `\`\`\`js\n${user.tag} (ID: ${user.id})\`\`\``, inline: true } )
+            .addFields({ name: "Auteur", value: `\`\`\`js\n${userStr}\`\`\``, inline: true })
         salon.send({ embeds: [embed] });
     }
 };

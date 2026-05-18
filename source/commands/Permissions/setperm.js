@@ -22,7 +22,7 @@ module.exports = {
 
         const permissionIndex = await client.db.get(`perms_${message.guild.id}`) || {};
         if (permissionIndex["perm" + permission]) {
-            permissionIndex["perm" + permission].roles = roles.map(role => role.id);
+            permissionIndex["perm" + permission].role = roles.map(role => role.id);
             await client.db.set(`perms_${message.guild.id}`, permissionIndex);
             message.channel.send(`Les rôles associés à la permission \`${permission}\` ont été mis à jour vers \`${roles.map(role => role.name).join(', ')}\`.`);
         } else {

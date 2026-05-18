@@ -1,7 +1,7 @@
 const Discord = require("discord.js");
 const ms = require("../../structures/Utils/ms");
 
-getNow = () => {
+const getNow = () => {
   return {
     time: new Date().toLocaleString("fr-FR", {
       timeZone: "Europe/Paris",

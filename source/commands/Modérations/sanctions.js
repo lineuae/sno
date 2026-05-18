@@ -19,8 +19,8 @@ module.exports = {
                 return message.channel.send('> ❌ Erreur : Usage: `warnlist <mention/Id>`');
             }
 
-            const db = await client.db.get(`sanction_${message.guild.id}`) || [];
-            const warns = db.filter(entry => entry.userId === user.id);
+            const db = await client.db.get(`sanctions_${message.guild.id}`) || [];
+            const warns = db.filter(entry => entry.user === user.id);
 
             if (warns.length === 0) {
                 return message.channel.send(`Aucun avertissement trouvé pour <@${user.id}>`);
@@ -44,7 +44,7 @@ module.exports = {
                 const tiime = new Date().toLocaleDateString().replace(/\//g, '-');
                 const embed = new EmbedBuilder()
                     .setColor(client.config.color)
-                    .setTitle(`Avertissements de ${user.tag}`)
+                    .setTitle(`Avertissements de ${user.username}`)
                     .setFooter({
                         text: client.footer.text + ` • Total de sanction: ${warns.length}`
                     })
@@ -82,7 +82,7 @@ module.exports = {
             const { embed, row } = generateEmbed(page);
             const msg = await message.channel.send({ embeds: [embed], components: [row] });
 
-            const collector = msg.createMessageComponentCollector();
+            const collector = msg.createMessageComponentCollector({ time: 120_000 });
 
             collector.on('collect', async interaction => {
                 if (interaction.user.id !== message.author.id) {
@@ -99,6 +99,10 @@ module.exports = {
 
                 const { embed, row } = generateEmbed(page);
                 await interaction.update({ embeds: [embed], components: [row] });
+            });
+
+            collector.on('end', () => {
+                msg.edit({ components: [] }).catch(() => {});
             });
 
         } catch (err) {

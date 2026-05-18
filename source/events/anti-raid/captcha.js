@@ -17,7 +17,7 @@ module.exports = {
         const timediff = Math.floor(milletime / 1000);
         const times = db.age ? db.age : 0
         if (timediff < times) {
-            console.log(`L'utilisateur ${member.user.tag} a un compte trop récent.`);
+            console.log(`L'utilisateur ${member.user.username} a un compte trop récent.`);
             await member.kick({ reason: "Compte créé trop récemment" });
             return;
         }
@@ -67,7 +67,7 @@ module.exports = {
         const collector = message.createMessageComponentCollector({ filter: (i) => i.isButton(), time: time });
 
         collector.on('collect', async (i) => {
-            if (i.user.id !== member.user.id) return i.reply({ content: "" })
+            if (i.user.id !== member.user.id) return i.reply({ content: "Ce captcha ne vous appartient pas.", flags: 64 })
 
             if (i.customId === 'valide') {
                 if (table.userCode === table.code.replace(/ /g, '')) {

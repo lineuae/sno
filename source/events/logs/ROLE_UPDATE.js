@@ -10,15 +10,16 @@ module.exports = {
 
         const fetchedLogs = await oldRole.guild.fetchAuditLogs({
             limit: 1,
-            type: 32
+            type: 31
         }).then(audit => audit.entries.first());
-        const user = fetchedLogs ? fetchedLogs.executor : "Inconnu";
+        const executor = fetchedLogs?.executor;
+        const userStr = executor ? `${executor.username} (ID: ${executor.id})` : "Inconnu";
 
         const embed = new EmbedBuilder()
             .setColor(color)
             .setFooter(client.footer)
             .setTitle('Modification de Rôle')
-            .addFields({ name: "Auteur", value: `\`\`\`js\n${user.tag} (ID: ${user.id})\`\`\``, inline: true } )
+            .addFields({ name: "Auteur", value: `\`\`\`js\n${userStr}\`\`\``, inline: true })
         if (oldRole.name !== newRole.name) {
             embed.addFields({name: "Nom", value: `*Avant :* \`\`\`js\n${oldRole.name}\`\`\`\n*Après :* \`\`\`js\n${newRole.name}\`\`\``, inline: true});
         }

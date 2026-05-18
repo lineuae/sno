@@ -7,7 +7,7 @@ module.exports = {
 
     param: "<:settings:1202977729969131600>",
     new: "<:new:1203415887697158164>",
-    temps: "<:temps:1197834074975387658>",
+    captcha_temps: "<:temps:1197834074975387658>",
     age: "<:age:1202977707739062332>",
     users: "<:user:1202977739229892651>",
     channel: "<:channel:1202977817004875847>",
@@ -19,14 +19,14 @@ module.exports = {
     // Leaderboard 
 
     vocal: "<:vocal:1210808528319815740>",
-    message: "<:message:1210808484254326854>",
+    leaderboard_message: "<:message:1210808484254326854>",
 
     // PANEL
     status_off: "<:status_off:1217192735807635546>",
     status_on: "<:status_on:1217192730690846851>",
     power_on: "<:power_on:1217060775005524038>",
-    power_off: "<:power_off:1217060748136812554",
-    sanction_on: "<:sanction_on:1217079403008360468",
+    power_off: "<:power_off:1217060748136812554>",
+    sanction_on: "<:sanction_on:1217079403008360468>",
     sanction_off: "<:sanction_off:1217079404388421652>",
     user_on: "<:user_on:1217171351014604922>",
     user: "<:user:1217575410242556027>",

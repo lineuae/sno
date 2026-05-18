@@ -43,13 +43,13 @@ module.exports = {
                 await message.channel.bulkDelete(messagesToDelete, true);
 
                 const deletedCount = messagesToDelete.size;
-                message.channel.send({ content: `Je viens de supprimer \`${deletedCount}\` messages de \`${targetUser.tag}\` !` });
+                message.channel.send({ content: `Je viens de supprimer \`${deletedCount}\` messages de \`${targetUser.username}\` !` });
             } else {
                 const fetched = await message.channel.messages.fetch({ limit: amount });
                 await message.channel.bulkDelete(fetched, true);
 
                 const deletedCount = fetched.size;
-                const msg = await message.channel.send({ content: `Je viens de supprimer \`${deletedCount}\` message${deletedCount < 0 ? "" : "s"} dans le salon !` });
+                const msg = await message.channel.send({ content: `Je viens de supprimer \`${deletedCount}\` message${deletedCount <= 1 ? "" : "s"} dans le salon !` });
                 setTimeout(() => {
                     msg.delete().catch(() => {});
                 }, 5000);

@@ -1,6 +1,8 @@
 const Discord = require("discord.js");
 const Snoway = require("../../structures/client/index");
 
+let statusInterval = null;
+
 module.exports = {
     name: "clientReady",
     /**
@@ -8,7 +10,8 @@ module.exports = {
      * @param {Snoway} client
      */
     run: async (client) => {
-       setInterval(async () => {
+        if (statusInterval) return;
+        statusInterval = setInterval(async () => {
             const db = await client.db.get(`status`)
             const presenceOptions = {
                 status: db?.status || 0,

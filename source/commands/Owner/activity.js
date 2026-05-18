@@ -56,7 +56,7 @@ module.exports = {
             return message.channel.send(await client.lang('activity.clear'))
         }
 
-        if ((activityType === 'playto' || activityType === 'play' || activity === "playing")) {
+        if ((activityType === 'playto' || activityType === 'play' || activityType === "playing")) {
             db.name = name
             db.type = 0
         } else if (activityType === 'watch' || activityType === "watching") {
@@ -68,7 +68,7 @@ module.exports = {
         } else if (activityType === 'stream' || activityType === 'streaming') {
             db.name = name
             db.type = 1
-        } else if (activityType === 'competing' || activity === "compet") {
+        } else if (activityType === 'competing' || activityType === "compet") {
             db.name = name
             db.type = 5
         } else {

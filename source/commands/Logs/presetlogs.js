@@ -33,7 +33,7 @@ module.exports = {
             components: [row]
         })
 
-        const collector = msg.createMessageComponentCollector()
+        const collector = msg.createMessageComponentCollector({ time: 60_000 })
 
         collector.on('collect', async (i) => {
             if (i.user.id !== message.author.id) {
@@ -99,6 +99,10 @@ module.exports = {
                     components: []
                 })
             }
+        })
+
+        collector.on('end', (_, reason) => {
+            if (reason === 'time') msg.edit({ components: [] }).catch(() => {});
         })
     },
 };
