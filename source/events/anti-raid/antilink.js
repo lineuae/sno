@@ -63,7 +63,7 @@ module.exports = {
 
         // Notify the user
         const notif = await message.channel.send(
-            `> 🔗 ${message.author}, les liens ne sont pas autorisés sur ce serveur.`
+            `> ${message.author}, les liens ne sont pas autorisés sur ce serveur.`
         ).catch(() => null);
         if (notif) setTimeout(() => notif.delete().catch(() => {}), 5000);
 
@@ -89,7 +89,7 @@ module.exports = {
                 const embed = new Discord.EmbedBuilder()
                     .setColor(color)
                     .setFooter(client.footer)
-                    .setAuthor({ name: '🔗 Anti-lien', iconURL: message.guild.iconURL({ size: 64 }) })
+                    .setAuthor({ name: 'Anti-lien', iconURL: message.guild.iconURL({ size: 64 }) })
                     .addFields(
                         { name: 'Membre', value: `${message.author} (\`${message.author.username}\`)`, inline: true },
                         { name: 'Salon', value: `<#${message.channelId}>`, inline: true },
