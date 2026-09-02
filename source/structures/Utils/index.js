@@ -1,8 +1,6 @@
-const anitiraid = require('./anitiraid')
 const ligne = require('./ligne')
 const ms = require('./ms')
-module.exports =  {
+module.exports = {
     ligne,
-    ms,
-    anitiraid
+    ms
 }

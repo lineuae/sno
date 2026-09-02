@@ -34,7 +34,6 @@ module.exports = {
                 { name: "Logs vocal", value: getChannelName(logs, 'voice'), inline: true },
                 { name: "Logs rôles", value: getChannelName(logs, 'roles'), inline: true },
                 { name: "Logs mods", value: getChannelName(logs, 'mod'), inline: true },
-                { name: "Logs raid", value: getChannelName(logs, 'raid'), inline: true },
                 { name: "Logs salon", value: getChannelName(logs, 'channel'), inline: true },
                 { name: "Logs boosts", value: getChannelName(logs, 'boost'), inline: true },
                 { name: "Logs flux", value: getChannelName(logs, 'flux'), inline: true }
